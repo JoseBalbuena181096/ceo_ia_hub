@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { deleteVideo } from '@/app/admin/actions'
 import { Plus, Trash2, ExternalLink } from 'lucide-react'
+import { ClientForm } from '@/components/client-form'
 
 export const dynamic = 'force-dynamic'
 
@@ -50,11 +51,11 @@ export default async function AdminVideosPage() {
                                         </a>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <form action={deleteVideo.bind(null, video.id)}>
+                                        <ClientForm action={deleteVideo.bind(null, video.id)}>
                                             <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50">
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>
-                                        </form>
+                                        </ClientForm>
                                     </TableCell>
                                 </TableRow>
                             ))

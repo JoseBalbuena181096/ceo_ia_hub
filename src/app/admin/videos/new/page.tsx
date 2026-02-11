@@ -3,6 +3,7 @@ import { createVideo } from '@/app/admin/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { ClientForm } from '@/components/client-form'
 import {
     Select,
     SelectContent,
@@ -28,10 +29,7 @@ export default function NewVideoPage() {
                     <CardDescription>Ingresa la URL pública de YouTube o TikTok.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form action={async (formData) => {
-                        'use server'
-                        await createVideo(formData)
-                    }} className="space-y-6">
+                    <ClientForm action={createVideo} className="space-y-6" redirectPath="/admin/videos">
                         <div className="space-y-2">
                             <Label htmlFor="title">Título</Label>
                             <Input id="title" name="title" placeholder="Ej. Hack para escritura rápida" required />
@@ -62,7 +60,7 @@ export default function NewVideoPage() {
                         </div>
 
                         <Button type="submit" className="w-full">Guardar Video</Button>
-                    </form>
+                    </ClientForm>
                 </CardContent>
             </Card>
         </div>

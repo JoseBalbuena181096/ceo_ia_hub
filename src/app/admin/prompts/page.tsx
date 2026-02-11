@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { deletePrompt } from '@/app/admin/actions'
 import { Plus, Trash2 } from 'lucide-react'
+import { ClientForm } from '@/components/client-form'
 
 export const dynamic = 'force-dynamic'
 
@@ -44,11 +45,11 @@ export default async function AdminPromptsPage() {
                                     <TableCell>{prompt.category}</TableCell>
                                     <TableCell>{prompt.tags?.join(', ')}</TableCell>
                                     <TableCell className="text-right">
-                                        <form action={deletePrompt.bind(null, prompt.id)}>
+                                        <ClientForm action={deletePrompt.bind(null, prompt.id)}>
                                             <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50">
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>
-                                        </form>
+                                        </ClientForm>
                                     </TableCell>
                                 </TableRow>
                             ))

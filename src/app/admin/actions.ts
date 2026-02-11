@@ -23,24 +23,26 @@ export async function createPrompt(formData: FormData) {
 
     if (error) {
         console.error('Error creating prompt:', error)
-        return
+        return { success: false, message: 'Error al crear el prompt' }
     }
 
     revalidatePath('/library')
     revalidatePath('/admin/prompts')
+    return { success: true, message: 'Prompt creado correctamente' }
 }
 
-export async function deletePrompt(id: string) {
+export async function deletePrompt(id: string, formData: FormData) {
     const supabase = await createClient()
     const { error } = await (supabase as any).from('prompts').delete().eq('id', id)
 
     if (error) {
         console.error('Error deleting prompt:', error)
-        return
+        return { success: false, message: 'Error al eliminar el prompt' }
     }
 
     revalidatePath('/library')
     revalidatePath('/admin/prompts')
+    return { success: true, message: 'Prompt eliminado correctamente' }
 }
 
 export async function createVideo(formData: FormData) {
@@ -59,22 +61,24 @@ export async function createVideo(formData: FormData) {
 
     if (error) {
         console.error('Error creating video:', error)
-        return
+        return { success: false, message: 'Error al crear el video' }
     }
 
     revalidatePath('/learning')
     revalidatePath('/admin/videos')
+    return { success: true, message: 'Video registrado correctamente' }
 }
 
-export async function deleteVideo(id: string) {
+export async function deleteVideo(id: string, formData: FormData) {
     const supabase = await createClient()
     const { error } = await (supabase as any).from('videos').delete().eq('id', id)
 
     if (error) {
         console.error('Error deleting video:', error)
-        return
+        return { success: false, message: 'Error al eliminar el video' }
     }
 
     revalidatePath('/learning')
     revalidatePath('/admin/videos')
+    return { success: true, message: 'Video eliminado correctamente' }
 }

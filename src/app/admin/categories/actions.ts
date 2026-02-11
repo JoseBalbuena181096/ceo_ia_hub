@@ -13,25 +13,27 @@ export async function createCategory(formData: FormData) {
 
     if (error) {
         console.error('Error creating category:', error)
-        return
+        return { success: false, message: 'Error al crear la categoría' }
     }
 
     revalidatePath('/admin/categories')
     revalidatePath('/admin/prompts/new')
     revalidatePath('/library')
+    return { success: true, message: 'Categoría creada correctamente' }
 }
 
-export async function deleteCategory(id: string) {
+export async function deleteCategory(id: string, formData: FormData) {
     const supabase = await createClient()
 
     const { error } = await supabase.from('prompt_categories').delete().eq('id', id)
 
     if (error) {
         console.error('Error deleting category:', error)
-        return
+        return { success: false, message: 'Error al eliminar la categoría' }
     }
 
     revalidatePath('/admin/categories')
     revalidatePath('/admin/prompts/new')
     revalidatePath('/library')
+    return { success: true, message: 'Categoría eliminada correctamente' }
 }

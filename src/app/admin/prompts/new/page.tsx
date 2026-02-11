@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { createClient } from '@/lib/supabase/server'
+import { ClientForm } from '@/components/client-form'
 import {
     Select,
     SelectContent,
@@ -38,10 +39,7 @@ export default async function NewPromptPage() {
                     <CardDescription>Ingresa la información para agregar al catálogo.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form action={async (formData) => {
-                        'use server'
-                        await createPrompt(formData)
-                    }} className="space-y-6">
+                    <ClientForm action={createPrompt} className="space-y-6" redirectPath="/admin/prompts">
                         <div className="space-y-2">
                             <Label htmlFor="title">Título</Label>
                             <Input id="title" name="title" placeholder="Ej. Generador de Correos RRHH" required />
@@ -80,7 +78,7 @@ export default async function NewPromptPage() {
                         </div>
 
                         <Button type="submit" className="w-full">Guardar Prompt</Button>
-                    </form>
+                    </ClientForm>
                 </CardContent>
             </Card>
         </div>
