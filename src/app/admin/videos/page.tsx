@@ -1,0 +1,73 @@
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase/server'
+import { Button } from '@/components/ui/button'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { deleteVideo } from '@/app/admin/actions'
+import { Plus, Trash2, ExternalLink } from 'lucide-react'
+
+export const dynamic = 'force-dynamic'
+
+export default async function AdminVideosPage() {
+    const supabase = createClient()
+    const { data: videos } = await (await supabase)
+        .from('videos')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+    return (
+        <div className="space-y-6">
+            <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold tracking-tight">Gestión de Videos</h1>
+                <Button asChild>
+                    <Link href="/admin/videos/new">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Nuevo Video
+                    </Link>
+                </Button>
+            </div>
+
+            <div className="rounded-md border">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Título</TableHead>
+                            <TableHead>Categoría</TableHead>
+                            <TableHead>Duración</TableHead>
+                            <TableHead>URL</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {videos && videos.length > 0 ? (
+                            videos.map((video) => (
+                                <TableRow key={video.id}>
+                                    <TableCell className="font-medium">{video.title}</TableCell>
+                                    <TableCell>{video.category}</TableCell>
+                                    <TableCell>{video.duration || '-'}</TableCell>
+                                    <TableCell>
+                                        <a href={video.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                                            Link <ExternalLink className="h-3 w-3" />
+                                        </a>
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <form action={deleteVideo.bind(null, video.id)}>
+                                            <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50">
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </form>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={5} className="h-24 text-center">
+                                    No hay videos registrados.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+        </div>
+    )
+}
