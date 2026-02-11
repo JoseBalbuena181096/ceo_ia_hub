@@ -5,6 +5,7 @@ En el Consorcio Educativo Oriente, adoptamos la Inteligencia Artificial no como 
 `
 
 
+// DEPRECATED: Categories are now managed in the database (prompt_categories table)
 export const PROMPT_CATEGORIES = [
     'Marketing',
     'Ventas',
