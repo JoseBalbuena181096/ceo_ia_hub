@@ -38,7 +38,7 @@ export default async function LibraryPage({
     const categories = ['Académico', 'Ventas', 'RRHH', 'Directivo']
 
     return (
-        <div className="container py-8 md:py-12">
+        <div className="container py-8 md:py-12 mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Biblioteca de Prompts</h1>

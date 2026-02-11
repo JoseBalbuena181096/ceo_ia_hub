@@ -11,7 +11,7 @@ export default function Home() {
       <MainNav />
       <main className="flex-1">
         <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32 bg-gradient-to-b from-white to-gray-100 dark:from-gray-950 dark:to-gray-900 border-b">
-          <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
+          <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
               CEO AI Hub
             </h1>
@@ -29,7 +29,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="container py-8 md:py-12 lg:py-24">
+        <section className="container py-8 md:py-12 lg:py-24 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-8 items-center">
             <Card className="w-full max-w-4xl bg-slate-50 dark:bg-slate-900 border-none shadow-md">
               <CardHeader className="text-center">
@@ -98,7 +98,7 @@ export default function Home() {
 
       </main>
       <footer className="py-6 md:px-8 md:py-0">
-        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
             Construido para el Consorcio Educativo Oriente.
           </p>
