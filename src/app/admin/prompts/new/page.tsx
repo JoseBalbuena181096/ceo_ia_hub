@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createPrompt } from '@/app/admin/actions'
+import { PROMPT_CATEGORIES } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -45,10 +46,11 @@ export default function NewPromptPage() {
                                     <SelectValue placeholder="Seleccionar categoría" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="Académico">Académico</SelectItem>
-                                    <SelectItem value="Ventas">Ventas</SelectItem>
-                                    <SelectItem value="RRHH">RRHH</SelectItem>
-                                    <SelectItem value="Directivo">Directivo</SelectItem>
+                                    {PROMPT_CATEGORIES.map((category) => (
+                                        <SelectItem key={category} value={category}>
+                                            {category}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         </div>

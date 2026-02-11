@@ -3,6 +3,7 @@ import { PromptCard } from '@/components/prompt-card'
 import { Search } from '@/components/search'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import { PROMPT_CATEGORIES } from '@/lib/constants'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,7 +36,7 @@ export default async function LibraryPage({
 
     const { data: prompts } = await request
 
-    const categories = ['Académico', 'Ventas', 'RRHH', 'Directivo']
+    const categories = PROMPT_CATEGORIES
 
     return (
         <div className="container py-8 md:py-12 mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,7 +58,7 @@ export default async function LibraryPage({
                         Todos
                     </Badge>
                 </Link>
-                {categories.map((cat) => (
+                {categories.map((cat: string) => (
                     <Link key={cat} href={`/library?category=${cat}`} className={category === cat ? "opacity-100" : "opacity-60 hover:opacity-100"}>
                         <Badge variant={category === cat ? "default" : "outline"} className="text-sm px-3 py-1 cursor-pointer">
                             {cat}

@@ -37,7 +37,7 @@ export interface Database {
                     id: string
                     title: string
                     content: string
-                    category: 'Académico' | 'Ventas' | 'RRHH' | 'Directivo'
+                    category: string
                     tags: string[] | null
                     created_by: string | null
                     created_at: string
@@ -46,7 +46,7 @@ export interface Database {
                     id?: string
                     title: string
                     content: string
-                    category: 'Académico' | 'Ventas' | 'RRHH' | 'Directivo'
+                    category: string
                     tags?: string[] | null
                     created_by?: string | null
                     created_at?: string
@@ -55,7 +55,7 @@ export interface Database {
                     id?: string
                     title?: string
                     content?: string
-                    category?: 'Académico' | 'Ventas' | 'RRHH' | 'Directivo'
+                    category?: string
                     tags?: string[] | null
                     created_by?: string | null
                     created_at?: string
