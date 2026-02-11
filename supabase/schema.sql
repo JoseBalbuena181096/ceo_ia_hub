@@ -26,13 +26,14 @@ create policy "Users can update own profile."
   using ( auth.uid() = id );
 
 -- PROMPTS TABLE
-create type prompt_category as enum ('Académico', 'Ventas', 'RRHH', 'Directivo');
+-- Removed enum constraint to allow dynamic categories
+-- create type prompt_category as enum ('Académico', 'Ventas', 'RRHH', 'Directivo');
 
 create table public.prompts (
   id uuid default uuid_generate_v4() primary key,
   title text not null,
   content text not null,
-  category prompt_category not null,
+  category text not null,
   tags text[], -- Array of strings
   created_by uuid references public.profiles(id),
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
