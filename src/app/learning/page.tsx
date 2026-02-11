@@ -12,7 +12,7 @@ export default async function LearningPage() {
         .order('created_at', { ascending: false })
 
     return (
-        <div className="container py-8 md:py-12">
+        <div className="container py-8 md:py-12 mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between md:gap-8">
                 <div className="space-y-1">
                     <h1 className="text-3xl font-bold tracking-tight">Micro-learning</h1>
