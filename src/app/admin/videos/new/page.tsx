@@ -28,7 +28,10 @@ export default function NewVideoPage() {
                     <CardDescription>Ingresa la URL pública de YouTube o TikTok.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form action={createVideo} className="space-y-6">
+                    <form action={async (formData) => {
+                        'use server'
+                        await createVideo(formData)
+                    }} className="space-y-6">
                         <div className="space-y-2">
                             <Label htmlFor="title">Título</Label>
                             <Input id="title" name="title" placeholder="Ej. Hack para escritura rápida" required />

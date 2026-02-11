@@ -29,7 +29,10 @@ export default function NewPromptPage() {
                     <CardDescription>Ingresa la información para agregar al catálogo.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form action={createPrompt} className="space-y-6">
+                    <form action={async (formData) => {
+                        'use server'
+                        await createPrompt(formData)
+                    }} className="space-y-6">
                         <div className="space-y-2">
                             <Label htmlFor="title">Título</Label>
                             <Input id="title" name="title" placeholder="Ej. Generador de Correos RRHH" required />
