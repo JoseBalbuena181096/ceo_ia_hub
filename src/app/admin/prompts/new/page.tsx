@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { createPrompt } from '@/app/admin/actions'
-import { PROMPT_CATEGORIES } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { createClient } from '@/lib/supabase/server'
 import {
     Select,
     SelectContent,
@@ -14,7 +14,15 @@ import {
 } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 
-export default function NewPromptPage() {
+export const dynamic = 'force-dynamic'
+
+export default async function NewPromptPage() {
+    const supabase = await createClient()
+    const { data: categories } = await supabase
+        .from('prompt_categories')
+        .select('*')
+        .order('name', { ascending: true })
+
     return (
         <div className="max-w-2xl mx-auto">
             <div className="flex items-center justify-between mb-6">
@@ -46,9 +54,9 @@ export default function NewPromptPage() {
                                     <SelectValue placeholder="Seleccionar categoría" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {PROMPT_CATEGORIES.map((category) => (
-                                        <SelectItem key={category} value={category}>
-                                            {category}
+                                    {categories?.map((cat: any) => (
+                                        <SelectItem key={cat.id} value={cat.name}>
+                                            {cat.name}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>

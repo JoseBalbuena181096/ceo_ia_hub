@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { LayoutDashboard, FileText, Video, Users, LogOut } from 'lucide-react'
+import { LayoutDashboard, FileText, Video, Users, LogOut, Tags } from 'lucide-react'
 
 export default async function AdminLayout({
     children,
@@ -51,6 +51,12 @@ export default async function AdminLayout({
                         <Link href="/admin/videos">
                             <Video className="mr-2 h-4 w-4" />
                             Videos
+                        </Link>
+                    </Button>
+                    <Button asChild variant="ghost" className="justify-start">
+                        <Link href="/admin/categories">
+                            <Tags className="mr-2 h-4 w-4" />
+                            Categorías
                         </Link>
                     </Button>
                 </nav>

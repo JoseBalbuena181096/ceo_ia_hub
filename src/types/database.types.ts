@@ -61,6 +61,23 @@ export interface Database {
                     created_at?: string
                 }
             }
+            prompt_categories: {
+                Row: {
+                    id: string
+                    name: string
+                    created_at: string
+                }
+                Insert: {
+                    id?: string
+                    name: string
+                    created_at?: string
+                }
+                Update: {
+                    id?: string
+                    name?: string
+                    created_at?: string
+                }
+            }
             videos: {
                 Row: {
                     id: string

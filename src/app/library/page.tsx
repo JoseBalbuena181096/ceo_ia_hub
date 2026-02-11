@@ -36,7 +36,13 @@ export default async function LibraryPage({
 
     const { data: prompts } = await request
 
-    const categories = PROMPT_CATEGORIES
+    // Fetch dynamic categories
+    const { data: categoriesData } = await (await supabase)
+        .from('prompt_categories')
+        .select('*')
+        .order('name', { ascending: true })
+
+    const categories = categoriesData?.map((c: any) => c.name) || []
 
     return (
         <div className="container py-8 md:py-12 mx-auto px-4 sm:px-6 lg:px-8">
