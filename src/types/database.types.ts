@@ -83,7 +83,7 @@ export interface Database {
                     id: string
                     title: string
                     url: string
-                    category: 'Hacks' | 'Tutoriales' | 'Casos de Uso'
+                    category: string
                     duration: string | null
                     created_at: string
                 }
@@ -91,7 +91,7 @@ export interface Database {
                     id?: string
                     title: string
                     url: string
-                    category?: 'Hacks' | 'Tutoriales' | 'Casos de Uso'
+                    category?: string
                     duration?: string | null
                     created_at?: string
                 }
@@ -99,7 +99,7 @@ export interface Database {
                     id?: string
                     title?: string
                     url?: string
-                    category?: 'Hacks' | 'Tutoriales' | 'Casos de Uso'
+                    category?: string
                     duration?: string | null
                     created_at?: string
                 }

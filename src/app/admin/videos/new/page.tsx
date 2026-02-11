@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ClientForm } from '@/components/client-form'
+import { createClient } from '@/lib/supabase/server'
 import {
     Select,
     SelectContent,
@@ -13,7 +14,13 @@ import {
 } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 
-export default function NewVideoPage() {
+export default async function NewVideoPage() {
+    const supabase = await createClient()
+    const { data: categories } = await supabase
+        .from('prompt_categories')
+        .select('*')
+        .order('name', { ascending: true })
+
     return (
         <div className="max-w-2xl mx-auto">
             <div className="flex items-center justify-between mb-6">
@@ -42,9 +49,11 @@ export default function NewVideoPage() {
                                     <SelectValue placeholder="Seleccionar categoría" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="Hacks">Hacks</SelectItem>
-                                    <SelectItem value="Tutoriales">Tutoriales</SelectItem>
-                                    <SelectItem value="Casos de Uso">Casos de Uso</SelectItem>
+                                    {categories?.map((cat: any) => (
+                                        <SelectItem key={cat.id} value={cat.name}>
+                                            {cat.name}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         </div>

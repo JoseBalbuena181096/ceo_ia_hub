@@ -33,8 +33,12 @@ export default async function LearningPage({
 
     const { data: videos } = await request
 
-    // Categories for videos are currently static in the DB enum, but we can list them here for the UI
-    const categories = ['Hacks', 'Tutoriales', 'Casos de Uso']
+    const { data: categoriesData } = await (await supabase)
+        .from('prompt_categories')
+        .select('*')
+        .order('name', { ascending: true })
+
+    const categories = categoriesData?.map((c: any) => c.name) || []
 
     return (
         <div className="container py-8 md:py-12 mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +60,7 @@ export default async function LearningPage({
                         Todos
                     </Badge>
                 </Link>
-                {categories.map((cat) => (
+                {categories.map((cat: string) => (
                     <Link key={cat} href={`/learning?category=${cat}`} className={category === cat ? "opacity-100" : "opacity-60 hover:opacity-100"}>
                         <Badge variant={category === cat ? "default" : "outline"} className="text-sm px-3 py-1 cursor-pointer">
                             {cat}
