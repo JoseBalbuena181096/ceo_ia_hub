@@ -30,20 +30,20 @@ export default function Home() {
         </section>
 
         <section className="container py-8 md:py-12 lg:py-24">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="col-span-2 bg-slate-50 dark:bg-slate-900 border-none shadow-md">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+          <div className="flex flex-col gap-8 items-center">
+            <Card className="w-full max-w-4xl bg-slate-50 dark:bg-slate-900 border-none shadow-md">
+              <CardHeader className="text-center">
+                <CardTitle className="text-2xl">
                   Declaración del Manifiesto de IA
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="prose dark:prose-invert">
+                <div className="prose dark:prose-invert max-w-none text-center mx-auto">
                   <p className="whitespace-pre-line text-lg font-medium text-gray-700 dark:text-gray-300">
                     {manifesto}
                   </p>
                 </div>
-                <div className="mt-4">
+                <div className="mt-6 text-center">
                   <Link href="/policies" className="text-sm font-medium text-indigo-600 hover:underline">
                     Ver Políticas de Uso Ético y Privacidad →
                   </Link>
@@ -51,7 +51,7 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            <div className="grid gap-4">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl w-full">
               {tools.map((tool) => (
                 <Card key={tool.name} className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-indigo-500">
                   <a href={tool.url} target="_blank" rel="noopener noreferrer">
