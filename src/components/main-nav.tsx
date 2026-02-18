@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
+import { MobileNav } from '@/components/mobile-nav'
 
 export async function MainNav() {
     const supabase = createClient()
@@ -19,6 +20,8 @@ export async function MainNav() {
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-14 max-w-screen-2xl items-center mx-auto px-4 sm:px-6 lg:px-8">
+                <MobileNav isAdmin={isAdmin} isLoggedIn={!!user} />
+
                 <div className="mr-4 hidden md:flex">
                     <Link href="/" className="mr-6 flex items-center space-x-2">
                         <span className="hidden font-bold sm:inline-block">
@@ -35,10 +38,10 @@ export async function MainNav() {
                     </nav>
                 </div>
                 <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-                    <div className="w-full flex-1 md:w-auto md:flex-none">
-                        {/* Search bar placeholder */}
-                    </div>
-                    <nav className="flex items-center">
+                    <Link href="/" className="font-bold md:hidden">
+                        CEO AI Hub
+                    </Link>
+                    <nav className="flex items-center gap-2">
                         {isAdmin && (
                             <Button asChild variant="default" size="sm" className="bg-indigo-600 hover:bg-indigo-700">
                                 <Link href="/admin">Panel Admin</Link>
@@ -50,7 +53,7 @@ export async function MainNav() {
                             </Button>
                         ) : (
                             <form action="/auth/signout" method="post">
-                                <Button variant="ghost" size="sm" type="submit">
+                                <Button variant="ghost" size="sm" type="submit" className="hidden md:inline-flex">
                                     Salir
                                 </Button>
                             </form>

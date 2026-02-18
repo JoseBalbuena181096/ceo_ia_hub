@@ -3,20 +3,20 @@ import { PromptCard } from '@/components/prompt-card'
 import { Search } from '@/components/search'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { PROMPT_CATEGORIES } from '@/lib/constants'
 
 export const dynamic = 'force-dynamic'
 
 export default async function LibraryPage({
     searchParams,
 }: {
-    searchParams?: {
+    searchParams?: Promise<{
         query?: string
         category?: string
-    }
+    }>
 }) {
-    const query = searchParams?.query || ''
-    const category = searchParams?.category || ''
+    const params = await searchParams
+    const query = params?.query || ''
+    const category = params?.category || ''
 
     const supabase = await createClient()
 
@@ -26,8 +26,7 @@ export default async function LibraryPage({
         .order('created_at', { ascending: false })
 
     if (query) {
-        // Simple search on title or content
-        request = request.textSearch('title', query, { type: 'websearch', config: 'english' }).or(`title.ilike.%${query}%,content.ilike.%${query}%`)
+        request = request.or(`title.ilike.%${query}%,content.ilike.%${query}%`)
     }
 
     if (category) {
@@ -42,7 +41,7 @@ export default async function LibraryPage({
         .select('*')
         .order('name', { ascending: true })
 
-    const categories = categoriesData?.map((c: any) => c.name) || []
+    const categories = categoriesData?.map((c: { name: string }) => c.name) || []
 
     return (
         <div className="container py-8 md:py-12 mx-auto px-4 sm:px-6 lg:px-8">

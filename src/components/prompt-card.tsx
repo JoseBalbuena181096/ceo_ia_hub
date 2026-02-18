@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react"
+import { toast } from "sonner"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -20,6 +21,7 @@ export function PromptCard({ title, content, category, tags }: PromptCardProps) 
     const handleCopy = () => {
         navigator.clipboard.writeText(content)
         setCopied(true)
+        toast.success('Prompt copiado al portapapeles')
         setTimeout(() => setCopied(false), 2000)
     }
 

@@ -9,13 +9,14 @@ export const dynamic = 'force-dynamic'
 export default async function LearningPage({
     searchParams,
 }: {
-    searchParams?: {
+    searchParams?: Promise<{
         query?: string
         category?: string
-    }
+    }>
 }) {
-    const query = searchParams?.query || ''
-    const category = searchParams?.category || ''
+    const params = await searchParams
+    const query = params?.query || ''
+    const category = params?.category || ''
     const supabase = createClient()
 
     let request = (await supabase)
@@ -24,7 +25,7 @@ export default async function LearningPage({
         .order('created_at', { ascending: false })
 
     if (query) {
-        request = request.textSearch('title', query, { type: 'websearch', config: 'english' }).or(`title.ilike.%${query}%`)
+        request = request.ilike('title', `%${query}%`)
     }
 
     if (category) {
@@ -38,7 +39,7 @@ export default async function LearningPage({
         .select('*')
         .order('name', { ascending: true })
 
-    const categories = categoriesData?.map((c: any) => c.name) || []
+    const categories = categoriesData?.map((c: { name: string }) => c.name) || []
 
     return (
         <div className="container py-8 md:py-12 mx-auto px-4 sm:px-6 lg:px-8">

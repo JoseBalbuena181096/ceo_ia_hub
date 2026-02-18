@@ -3,8 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { deleteVideo } from '@/app/admin/actions'
-import { Plus, Trash2, ExternalLink } from 'lucide-react'
-import { ClientForm } from '@/components/client-form'
+import { Plus, ExternalLink } from 'lucide-react'
+import { ConfirmDelete } from '@/components/confirm-delete'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,18 +51,23 @@ export default async function AdminVideosPage() {
                                         </a>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <ClientForm action={deleteVideo.bind(null, video.id)}>
-                                            <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50">
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </ClientForm>
+                                        <ConfirmDelete
+                                            action={deleteVideo.bind(null, video.id)}
+                                            itemName={video.title}
+                                        />
                                     </TableCell>
                                 </TableRow>
                             ))
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={5} className="h-24 text-center">
-                                    No hay videos registrados.
+                                    <p className="text-muted-foreground mb-2">No hay videos registrados.</p>
+                                    <Button asChild variant="outline" size="sm">
+                                        <Link href="/admin/videos/new">
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Agregar primer video
+                                        </Link>
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         )}

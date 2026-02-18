@@ -3,7 +3,8 @@ import { MainNav } from '@/components/main-nav'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { manifesto, tools } from '@/lib/constants'
-import { Sparkles, BookOpen, LayoutGrid, Search } from 'lucide-react'
+import { Sparkles, BookOpen, LayoutGrid } from 'lucide-react'
+import { HomeSearch } from '@/components/home-search'
 
 export default function Home() {
   return (
@@ -81,18 +82,7 @@ export default function Home() {
             <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
               Encuentra prompts, videos, tutoriales y más.
             </p>
-            <div className="w-full max-w-lg flex items-center space-x-2">
-              {/* We will implement a real search later */}
-              <div className="relative w-full">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <input
-                  type="search"
-                  placeholder="Buscar prompts, videos..."
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-8"
-                />
-              </div>
-              <Button type="submit">Buscar</Button>
-            </div>
+            <HomeSearch />
           </div>
         </section>
 

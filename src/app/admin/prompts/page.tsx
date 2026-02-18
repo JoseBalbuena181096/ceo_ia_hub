@@ -3,8 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { deletePrompt } from '@/app/admin/actions'
-import { Plus, Trash2 } from 'lucide-react'
-import { ClientForm } from '@/components/client-form'
+import { Plus } from 'lucide-react'
+import { ConfirmDelete } from '@/components/confirm-delete'
 
 export const dynamic = 'force-dynamic'
 
@@ -45,18 +45,23 @@ export default async function AdminPromptsPage() {
                                     <TableCell>{prompt.category}</TableCell>
                                     <TableCell>{prompt.tags?.join(', ')}</TableCell>
                                     <TableCell className="text-right">
-                                        <ClientForm action={deletePrompt.bind(null, prompt.id)}>
-                                            <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50">
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </ClientForm>
+                                        <ConfirmDelete
+                                            action={deletePrompt.bind(null, prompt.id)}
+                                            itemName={prompt.title}
+                                        />
                                     </TableCell>
                                 </TableRow>
                             ))
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
-                                    No hay prompts registrados.
+                                    <p className="text-muted-foreground mb-2">No hay prompts registrados.</p>
+                                    <Button asChild variant="outline" size="sm">
+                                        <Link href="/admin/prompts/new">
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Crear primer prompt
+                                        </Link>
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         )}

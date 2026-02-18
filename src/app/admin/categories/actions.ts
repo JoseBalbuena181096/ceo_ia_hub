@@ -22,7 +22,7 @@ export async function createCategory(formData: FormData) {
     return { success: true, message: 'Categoría creada correctamente' }
 }
 
-export async function deleteCategory(id: string, formData: FormData) {
+export async function deleteCategory(id: string, _formData: FormData) {
     const supabase = await createClient()
 
     const { error } = await supabase.from('prompt_categories').delete().eq('id', id)

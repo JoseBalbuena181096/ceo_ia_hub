@@ -2,13 +2,13 @@ export const dynamic = 'force-dynamic'
 
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Trash2 } from 'lucide-react'
 import { createCategory, deleteCategory } from '@/app/admin/categories/actions'
 import { ClientForm } from '@/components/client-form'
+import { ConfirmDelete } from '@/components/confirm-delete'
+import { SubmitButton } from '@/components/submit-button'
 
 export default async function CategoriesPage() {
     const supabase = await createClient()
@@ -36,7 +36,7 @@ export default async function CategoriesPage() {
                                 <Label htmlFor="name">Nombre</Label>
                                 <Input name="name" id="name" placeholder="Ej. Innovación" required />
                             </div>
-                            <Button type="submit">Agregar</Button>
+                            <SubmitButton loadingText="Agregando...">Agregar</SubmitButton>
                         </ClientForm>
                     </CardContent>
                 </Card>
@@ -58,11 +58,10 @@ export default async function CategoriesPage() {
                                     <TableRow key={category.id}>
                                         <TableCell className="font-medium">{category.name}</TableCell>
                                         <TableCell>
-                                            <ClientForm action={deleteCategory.bind(null, category.id)}>
-                                                <Button variant="ghost" size="icon" className="text-destructive">
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </ClientForm>
+                                            <ConfirmDelete
+                                                action={deleteCategory.bind(null, category.id)}
+                                                itemName={category.name}
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}

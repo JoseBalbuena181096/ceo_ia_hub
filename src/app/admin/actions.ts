@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
 export async function createPrompt(formData: FormData) {
@@ -31,7 +30,7 @@ export async function createPrompt(formData: FormData) {
     return { success: true, message: 'Prompt creado correctamente' }
 }
 
-export async function deletePrompt(id: string, formData: FormData) {
+export async function deletePrompt(id: string, _formData: FormData) {
     const supabase = await createClient()
     const { error } = await (supabase as any).from('prompts').delete().eq('id', id)
 
@@ -69,7 +68,7 @@ export async function createVideo(formData: FormData) {
     return { success: true, message: 'Video registrado correctamente' }
 }
 
-export async function deleteVideo(id: string, formData: FormData) {
+export async function deleteVideo(id: string, _formData: FormData) {
     const supabase = await createClient()
     const { error } = await (supabase as any).from('videos').delete().eq('id', id)
 

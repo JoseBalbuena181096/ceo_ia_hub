@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ClientForm } from '@/components/client-form'
+import { SubmitButton } from '@/components/submit-button'
 import { createClient } from '@/lib/supabase/server'
 import {
     Select,
@@ -49,7 +50,7 @@ export default async function NewVideoPage() {
                                     <SelectValue placeholder="Seleccionar categoría" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {categories?.map((cat: any) => (
+                                    {categories?.map((cat: { id: string; name: string }) => (
                                         <SelectItem key={cat.id} value={cat.name}>
                                             {cat.name}
                                         </SelectItem>
@@ -68,7 +69,7 @@ export default async function NewVideoPage() {
                             <Input id="duration" name="duration" placeholder="Ej. 1:30" />
                         </div>
 
-                        <Button type="submit" className="w-full">Guardar Video</Button>
+                        <SubmitButton className="w-full" loadingText="Guardando video...">Guardar Video</SubmitButton>
                     </ClientForm>
                 </CardContent>
             </Card>

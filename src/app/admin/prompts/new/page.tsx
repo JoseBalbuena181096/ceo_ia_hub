@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { createClient } from '@/lib/supabase/server'
 import { ClientForm } from '@/components/client-form'
+import { SubmitButton } from '@/components/submit-button'
 import {
     Select,
     SelectContent,
@@ -52,7 +53,7 @@ export default async function NewPromptPage() {
                                     <SelectValue placeholder="Seleccionar categoría" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {categories?.map((cat: any) => (
+                                    {categories?.map((cat: { id: string; name: string }) => (
                                         <SelectItem key={cat.id} value={cat.name}>
                                             {cat.name}
                                         </SelectItem>
@@ -77,7 +78,7 @@ export default async function NewPromptPage() {
                             />
                         </div>
 
-                        <Button type="submit" className="w-full">Guardar Prompt</Button>
+                        <SubmitButton className="w-full" loadingText="Guardando prompt...">Guardar Prompt</SubmitButton>
                     </ClientForm>
                 </CardContent>
             </Card>
