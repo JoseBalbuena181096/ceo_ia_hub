@@ -6,6 +6,9 @@ import { MainNav } from '@/components/main-nav'
 import { Pagination } from '@/components/pagination'
 import Link from 'next/link'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = { title: 'Biblioteca de Prompts' }
 export const dynamic = 'force-dynamic'
 
 const PAGE_SIZE = 12
