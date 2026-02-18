@@ -48,14 +48,14 @@ export function ToggleBlockButton({ action, isBlocked, userName }: ToggleBlockBu
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
                 <Button
-                    variant={isBlocked ? 'outline' : 'ghost'}
+                    variant={isBlocked ? 'outline' : 'destructive'}
                     size="sm"
-                    className={isBlocked ? 'text-green-600 hover:text-green-700' : 'text-red-600 hover:text-red-700'}
+                    className={isBlocked ? 'border-green-600 text-green-600 hover:bg-green-50 hover:text-green-700' : ''}
                 >
                     {isBlocked ? (
-                        <><ShieldCheck className="mr-1 h-4 w-4" /> Desbloquear</>
+                        <><ShieldCheck className="mr-1.5 h-4 w-4" /> Desbloquear</>
                     ) : (
-                        <><ShieldBan className="mr-1 h-4 w-4" /> Bloquear</>
+                        <><ShieldBan className="mr-1.5 h-4 w-4" /> Bloquear</>
                     )}
                 </Button>
             </AlertDialogTrigger>
@@ -81,7 +81,7 @@ export function ToggleBlockButton({ action, isBlocked, userName }: ToggleBlockBu
                         {loading ? (
                             <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Procesando...</>
                         ) : (
-                            isBlocked ? 'Desbloquear' : 'Bloquear'
+                            isBlocked ? 'Sí, desbloquear' : 'Sí, bloquear'
                         )}
                     </AlertDialogAction>
                 </AlertDialogFooter>
