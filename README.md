@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CEO AI Hub
 
-## Getting Started
+Plataforma interna de gestión del conocimiento para el **Consorcio Educativo Oriente (CEO)**. Centraliza el manifiesto de IA, una biblioteca de prompts, un catálogo de micro-learning en video, accesos directos a herramientas (Gemini, NotebookLM, Workspace) y un panel de administración de usuarios.
 
-First, run the development server:
+## Tech Stack
+
+- **Next.js 16** — App Router, React 19, TypeScript
+- **Supabase** — Auth (email/password) + Postgres con Row Level Security
+- **Tailwind CSS v4** + **shadcn/ui** (estilo new-york)
+- **lucide-react** — Iconos
+- **sonner** — Notificaciones toast
+
+## Funcionalidades
+
+### Usuarios
+
+- **Biblioteca de Prompts** (`/library`) — Catálogo con búsqueda, filtrado por categoría y paginación
+- **Micro-learning** (`/learning`) — Catálogo de videos con reproducción modal (YouTube/TikTok)
+- **Búsqueda Global** (`/search`) — Busca prompts y videos simultáneamente desde el home
+- **Perfil** (`/profile`) — Editar nombre y departamento, ver favoritos guardados
+- **Favoritos** — Marcar prompts y videos con corazón, accesibles desde el perfil
+
+### Administradores
+
+- **Dashboard** (`/admin`) — Estadísticas generales
+- **Gestión de Prompts** (`/admin/prompts`) — CRUD con paginación (20 por página)
+- **Gestión de Videos** (`/admin/videos`) — CRUD con paginación (20 por página)
+- **Categorías** (`/admin/categories`) — Categorías dinámicas para prompts y videos
+- **Usuarios** (`/admin/users`) — Ver, bloquear y desbloquear usuarios
+
+## Inicio rápido
+
+### Requisitos previos
+
+- Node.js 18+
+- Proyecto en [Supabase](https://supabase.com) con las tablas configuradas
+
+### Instalación
+
+```bash
+git clone <repo-url>
+cd ceo_ia_hub
+npm install
+```
+
+### Variables de entorno
+
+Crear `.env.local` en la raíz:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-anon-key
+```
+
+### Base de datos
+
+Ejecutar en orden en Supabase Dashboard > SQL Editor:
+
+1. `supabase/schema.sql` — Esquema base (profiles, prompts, videos, favorites)
+2. `supabase/migrations/01_update_category_text.sql`
+3. `supabase/migrations/02_create_categories_table.sql`
+4. `supabase/migrations/03_update_video_category_text.sql`
+5. `supabase/migrations/04_add_user_blocked_field.sql`
+6. `supabase/migrations/05_fix_user_blocked_and_admin_policy.sql`
+7. `supabase/migrations/06_create_favorites_table.sql`
+
+### Desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts disponibles
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Comando | Descripción |
+|---|---|
+| `npm run dev` | Servidor de desarrollo (localhost:3000) |
+| `npm run build` | Build de producción |
+| `npm run lint` | Linter con ESLint |
 
-## Learn More
+## Estructura del proyecto
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/
+│   ├── admin/          # Panel de administración (protegido)
+│   │   ├── categories/ # CRUD de categorías
+│   │   ├── prompts/    # CRUD de prompts
+│   │   ├── users/      # Gestión de usuarios
+│   │   └── videos/     # CRUD de videos
+│   ├── auth/           # Callback de autenticación
+│   ├── learning/       # Catálogo de videos
+│   ├── library/        # Catálogo de prompts
+│   ├── login/          # Login y registro
+│   ├── profile/        # Perfil de usuario y favoritos
+│   └── search/         # Búsqueda global
+├── components/
+│   ├── ui/             # Componentes shadcn/ui
+│   └── *.tsx           # Componentes custom (nav, cards, etc.)
+├── lib/
+│   ├── supabase/       # Clientes Supabase (server, client, middleware)
+│   ├── constants.ts    # Contenido estático
+│   └── utils.ts        # Utilidades
+└── types/              # Tipos TypeScript
+supabase/
+├── schema.sql          # Esquema completo
+└── migrations/         # Migraciones incrementales
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Roles y permisos
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Acción | Usuario | Admin |
+|---|---|---|
+| Ver prompts y videos | Si | Si |
+| Buscar contenido | Si | Si |
+| Editar perfil propio | Si | Si |
+| Gestionar favoritos | Si | Si |
+| CRUD prompts/videos | No | Si |
+| Gestionar categorías | No | Si |
+| Bloquear usuarios | No | Si |
