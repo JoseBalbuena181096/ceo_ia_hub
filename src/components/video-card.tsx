@@ -75,14 +75,14 @@ export function VideoCard({ title, url, category, duration }: VideoCardProps) {
                                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                         ) : (
-                            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col items-center justify-center gap-3 p-4">
+                            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col items-center justify-center gap-3 px-5 py-4">
                                 <div className="flex items-center gap-2">
                                     <Music className="h-5 w-5 text-[#ff0050]" />
                                     <span className="text-white font-semibold text-sm">
                                         {info?.platform || 'Video'}
                                     </span>
                                 </div>
-                                <p className="text-white/90 text-sm text-center line-clamp-3 leading-relaxed">
+                                <p className="text-white text-base font-medium text-center line-clamp-3 leading-snug">
                                     {title}
                                 </p>
                             </div>
@@ -108,22 +108,24 @@ export function VideoCard({ title, url, category, duration }: VideoCardProps) {
                                 : "max-w-3xl p-0 overflow-hidden flex flex-col"
                     }
                 >
-                    <DialogHeader className="p-4 pb-2 flex flex-row items-center justify-between shrink-0">
-                        <DialogTitle className="pr-10">{title}</DialogTitle>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 shrink-0"
-                            onClick={() => setExpanded(!expanded)}
-                        >
-                            {expanded
-                                ? <Minimize2 className="h-4 w-4" />
-                                : <Maximize2 className="h-4 w-4" />
-                            }
-                            <span className="sr-only">
-                                {expanded ? 'Reducir' : 'Expandir'}
-                            </span>
-                        </Button>
+                    <DialogHeader className="p-4 pb-2 shrink-0">
+                        <div className="flex items-center gap-2 pr-16">
+                            <DialogTitle className="flex-1">{title}</DialogTitle>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 shrink-0"
+                                onClick={() => setExpanded(!expanded)}
+                            >
+                                {expanded
+                                    ? <Minimize2 className="h-4 w-4" />
+                                    : <Maximize2 className="h-4 w-4" />
+                                }
+                                <span className="sr-only">
+                                    {expanded ? 'Reducir' : 'Expandir'}
+                                </span>
+                            </Button>
+                        </div>
                     </DialogHeader>
                     <div className={
                         isTikTok
