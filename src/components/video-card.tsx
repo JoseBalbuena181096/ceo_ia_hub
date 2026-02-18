@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Play } from "lucide-react"
+import { Play, Maximize2, Minimize2, Music } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
@@ -48,7 +49,9 @@ function getVideoInfo(url: string) {
 
 export function VideoCard({ title, url, category, duration }: VideoCardProps) {
     const [open, setOpen] = useState(false)
+    const [expanded, setExpanded] = useState(false)
     const info = getVideoInfo(url)
+    const isTikTok = info?.platform === 'TikTok'
 
     return (
         <>
@@ -72,10 +75,16 @@ export function VideoCard({ title, url, category, duration }: VideoCardProps) {
                                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                         ) : (
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center">
-                                <span className="text-white/80 text-sm font-medium">
-                                    {info?.platform || 'Video'}
-                                </span>
+                            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col items-center justify-center gap-3 p-4">
+                                <div className="flex items-center gap-2">
+                                    <Music className="h-5 w-5 text-[#ff0050]" />
+                                    <span className="text-white font-semibold text-sm">
+                                        {info?.platform || 'Video'}
+                                    </span>
+                                </div>
+                                <p className="text-white/90 text-sm text-center line-clamp-3 leading-relaxed">
+                                    {title}
+                                </p>
                             </div>
                         )}
                         <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -87,16 +96,48 @@ export function VideoCard({ title, url, category, duration }: VideoCardProps) {
                 </CardContent>
             </Card>
 
-            <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="max-w-3xl p-0 overflow-hidden">
-                    <DialogHeader className="p-4 pb-0">
-                        <DialogTitle>{title}</DialogTitle>
+            <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setExpanded(false) }}>
+                <DialogContent
+                    className={
+                        isTikTok
+                            ? expanded
+                                ? "max-w-[95vw] h-[95vh] max-h-[95vh] p-0 overflow-hidden flex flex-col"
+                                : "max-w-sm sm:max-w-md p-0 overflow-hidden flex flex-col"
+                            : expanded
+                                ? "max-w-[95vw] h-[95vh] max-h-[95vh] p-0 overflow-hidden flex flex-col"
+                                : "max-w-3xl p-0 overflow-hidden flex flex-col"
+                    }
+                >
+                    <DialogHeader className="p-4 pb-2 flex flex-row items-center justify-between shrink-0">
+                        <DialogTitle className="pr-10">{title}</DialogTitle>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 shrink-0"
+                            onClick={() => setExpanded(!expanded)}
+                        >
+                            {expanded
+                                ? <Minimize2 className="h-4 w-4" />
+                                : <Maximize2 className="h-4 w-4" />
+                            }
+                            <span className="sr-only">
+                                {expanded ? 'Reducir' : 'Expandir'}
+                            </span>
+                        </Button>
                     </DialogHeader>
-                    <div className="aspect-video w-full">
+                    <div className={
+                        isTikTok
+                            ? expanded
+                                ? "flex-1 min-h-0"
+                                : "w-full aspect-[9/16] max-h-[70vh]"
+                            : expanded
+                                ? "flex-1 min-h-0"
+                                : "aspect-video w-full"
+                    }>
                         {info?.embedUrl ? (
                             <iframe
                                 src={info.embedUrl}
-                                className="w-full h-full"
+                                className="w-full h-full border-0"
                                 allowFullScreen
                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             />
