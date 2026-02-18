@@ -5,15 +5,35 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { deletePrompt } from '@/app/admin/actions'
 import { Plus, Pencil } from 'lucide-react'
 import { ConfirmDelete } from '@/components/confirm-delete'
+import { Pagination } from '@/components/pagination'
 
 export const dynamic = 'force-dynamic'
 
-export default async function AdminPromptsPage() {
-    const supabase = createClient()
-    const { data: prompts } = await (await supabase)
+const PAGE_SIZE = 20
+
+export default async function AdminPromptsPage({
+    searchParams,
+}: {
+    searchParams?: Promise<{ page?: string }>
+}) {
+    const params = await searchParams
+    const currentPage = Math.max(1, parseInt(params?.page || '1'))
+
+    const supabase = await createClient()
+
+    const { count } = await supabase
+        .from('prompts')
+        .select('*', { count: 'exact', head: true })
+    const totalPages = Math.ceil((count || 0) / PAGE_SIZE)
+
+    const from = (currentPage - 1) * PAGE_SIZE
+    const to = from + PAGE_SIZE - 1
+
+    const { data: prompts } = await supabase
         .from('prompts')
         .select('*')
         .order('created_at', { ascending: false })
+        .range(from, to)
 
     return (
         <div className="space-y-6">
@@ -73,6 +93,8 @@ export default async function AdminPromptsPage() {
                     </TableBody>
                 </Table>
             </div>
+
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
         </div>
     )
 }

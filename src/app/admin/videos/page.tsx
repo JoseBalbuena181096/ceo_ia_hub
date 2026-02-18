@@ -5,15 +5,35 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { deleteVideo } from '@/app/admin/actions'
 import { Plus, ExternalLink, Pencil } from 'lucide-react'
 import { ConfirmDelete } from '@/components/confirm-delete'
+import { Pagination } from '@/components/pagination'
 
 export const dynamic = 'force-dynamic'
 
-export default async function AdminVideosPage() {
-    const supabase = createClient()
-    const { data: videos } = await (await supabase)
+const PAGE_SIZE = 20
+
+export default async function AdminVideosPage({
+    searchParams,
+}: {
+    searchParams?: Promise<{ page?: string }>
+}) {
+    const params = await searchParams
+    const currentPage = Math.max(1, parseInt(params?.page || '1'))
+
+    const supabase = await createClient()
+
+    const { count } = await supabase
+        .from('videos')
+        .select('*', { count: 'exact', head: true })
+    const totalPages = Math.ceil((count || 0) / PAGE_SIZE)
+
+    const from = (currentPage - 1) * PAGE_SIZE
+    const to = from + PAGE_SIZE - 1
+
+    const { data: videos } = await supabase
         .from('videos')
         .select('*')
         .order('created_at', { ascending: false })
+        .range(from, to)
 
     return (
         <div className="space-y-6">
@@ -79,6 +99,8 @@ export default async function AdminVideosPage() {
                     </TableBody>
                 </Table>
             </div>
+
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
         </div>
     )
 }

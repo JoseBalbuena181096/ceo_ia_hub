@@ -55,6 +55,16 @@ export function MobileNav({ isAdmin, isLoggedIn }: MobileNavProps) {
                         Micro-learning
                     </Link>
 
+                    {isLoggedIn && (
+                        <Link
+                            href="/profile"
+                            onClick={() => setOpen(false)}
+                            className="rounded-md px-3 py-2 text-sm font-medium hover:bg-accent transition-colors"
+                        >
+                            Mi perfil
+                        </Link>
+                    )}
+
                     {isAdmin && (
                         <>
                             <div className="my-2 border-t" />

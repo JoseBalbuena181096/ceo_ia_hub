@@ -1,22 +1,27 @@
 'use client'
 
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Play, Maximize2, Minimize2, Music } from "lucide-react"
+import { Play, Maximize2, Minimize2, Music, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
+import { toggleFavorite } from "@/app/profile/actions"
 
 interface VideoCardProps {
     title: string
     url: string
     category: string
     duration?: string | null
+    videoId?: string
+    isFavorited?: boolean
 }
 
 function getVideoInfo(url: string) {
@@ -47,11 +52,27 @@ function getVideoInfo(url: string) {
     return null
 }
 
-export function VideoCard({ title, url, category, duration }: VideoCardProps) {
+export function VideoCard({ title, url, category, duration, videoId, isFavorited = false }: VideoCardProps) {
     const [open, setOpen] = useState(false)
     const [expanded, setExpanded] = useState(false)
+    const [favorited, setFavorited] = useState(isFavorited)
+    const [favLoading, setFavLoading] = useState(false)
     const info = getVideoInfo(url)
     const isTikTok = info?.platform === 'TikTok'
+
+    const handleFavorite = async (e: React.MouseEvent) => {
+        e.stopPropagation()
+        if (!videoId || favLoading) return
+        setFavLoading(true)
+        const result = await toggleFavorite('video', videoId)
+        if (result.success) {
+            setFavorited(result.favorited)
+            toast.success(result.message)
+        } else {
+            toast.error(result.message)
+        }
+        setFavLoading(false)
+    }
 
     return (
         <>
@@ -62,7 +83,19 @@ export function VideoCard({ title, url, category, duration }: VideoCardProps) {
                 <CardHeader className="p-4 pb-2">
                     <div className="flex justify-between items-start">
                         <Badge variant="secondary" className="mb-2">{category}</Badge>
-                        {duration && <span className="text-xs text-muted-foreground">{duration}</span>}
+                        <div className="flex items-center gap-2">
+                            {duration && <span className="text-xs text-muted-foreground">{duration}</span>}
+                            {videoId && (
+                                <button
+                                    onClick={handleFavorite}
+                                    disabled={favLoading}
+                                    className="p-1 rounded-md hover:bg-muted transition-colors disabled:opacity-50"
+                                    aria-label={favorited ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+                                >
+                                    <Heart className={cn("h-4 w-4 transition-colors", favorited ? "fill-red-500 text-red-500" : "text-muted-foreground")} />
+                                </button>
+                            )}
+                        </div>
                     </div>
                     <CardTitle className="text-lg line-clamp-2">{title}</CardTitle>
                 </CardHeader>

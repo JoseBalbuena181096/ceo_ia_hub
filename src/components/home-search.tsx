@@ -12,7 +12,7 @@ export function HomeSearch() {
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
         if (query.trim()) {
-            router.push(`/library?query=${encodeURIComponent(query.trim())}`)
+            router.push(`/search?query=${encodeURIComponent(query.trim())}`)
         }
     }
 

@@ -67,6 +67,20 @@ export default async function LibraryPage({
 
     const categories = categoriesData?.map((c: { name: string }) => c.name) || []
 
+    // Fetch user favorites
+    const { data: { user } } = await supabase.auth.getUser()
+    let favoriteIds: Set<string> = new Set()
+    if (user) {
+        const { data: favs } = await supabase
+            .from('favorites')
+            .select('item_id')
+            .eq('user_id', user.id)
+            .eq('item_type', 'prompt')
+        if (favs) {
+            favoriteIds = new Set(favs.map((f: { item_id: string }) => f.item_id))
+        }
+    }
+
     return (
         <>
         <MainNav />
@@ -107,6 +121,8 @@ export default async function LibraryPage({
                             content={prompt.content}
                             category={prompt.category}
                             tags={prompt.tags}
+                            promptId={prompt.id}
+                            isFavorited={favoriteIds.has(prompt.id)}
                         />
                     ))
                 ) : (

@@ -5,18 +5,23 @@ import { toast } from "sonner"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Copy, Check } from "lucide-react"
+import { Copy, Check, Heart } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { toggleFavorite } from "@/app/profile/actions"
 
 interface PromptCardProps {
     title: string
     content: string
     category: string
     tags?: string[] | null
+    promptId?: string
+    isFavorited?: boolean
 }
 
-export function PromptCard({ title, content, category, tags }: PromptCardProps) {
+export function PromptCard({ title, content, category, tags, promptId, isFavorited = false }: PromptCardProps) {
     const [copied, setCopied] = useState(false)
+    const [favorited, setFavorited] = useState(isFavorited)
+    const [favLoading, setFavLoading] = useState(false)
 
     const handleCopy = () => {
         navigator.clipboard.writeText(content)
@@ -25,12 +30,38 @@ export function PromptCard({ title, content, category, tags }: PromptCardProps) 
         setTimeout(() => setCopied(false), 2000)
     }
 
+    const handleFavorite = async (e: React.MouseEvent) => {
+        e.stopPropagation()
+        if (!promptId || favLoading) return
+        setFavLoading(true)
+        const result = await toggleFavorite('prompt', promptId)
+        if (result.success) {
+            setFavorited(result.favorited)
+            toast.success(result.message)
+        } else {
+            toast.error(result.message)
+        }
+        setFavLoading(false)
+    }
+
     return (
         <Card className="flex flex-col h-full hover:shadow-md transition-shadow">
             <CardHeader className="pb-3">
                 <div className="flex justify-between items-start gap-2">
                     <CardTitle className="text-lg font-semibold leading-tight">{title}</CardTitle>
-                    <Badge variant="outline" className="shrink-0">{category}</Badge>
+                    <div className="flex items-center gap-1 shrink-0">
+                        {promptId && (
+                            <button
+                                onClick={handleFavorite}
+                                disabled={favLoading}
+                                className="p-1 rounded-md hover:bg-muted transition-colors disabled:opacity-50"
+                                aria-label={favorited ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+                            >
+                                <Heart className={cn("h-4 w-4 transition-colors", favorited ? "fill-red-500 text-red-500" : "text-muted-foreground")} />
+                            </button>
+                        )}
+                        <Badge variant="outline">{category}</Badge>
+                    </div>
                 </div>
                 {tags && tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">

@@ -67,6 +67,20 @@ export default async function LearningPage({
 
     const categories = categoriesData?.map((c: { name: string }) => c.name) || []
 
+    // Fetch user favorites
+    const { data: { user } } = await supabase.auth.getUser()
+    let favoriteIds: Set<string> = new Set()
+    if (user) {
+        const { data: favs } = await supabase
+            .from('favorites')
+            .select('item_id')
+            .eq('user_id', user.id)
+            .eq('item_type', 'video')
+        if (favs) {
+            favoriteIds = new Set(favs.map((f: { item_id: string }) => f.item_id))
+        }
+    }
+
     return (
         <>
         <MainNav />
@@ -107,6 +121,8 @@ export default async function LearningPage({
                             url={video.url}
                             category={video.category}
                             duration={video.duration}
+                            videoId={video.id}
+                            isFavorited={favoriteIds.has(video.id)}
                         />
                     ))
                 ) : (

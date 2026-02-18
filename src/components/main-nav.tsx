@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { MobileNav } from '@/components/mobile-nav'
+import { User } from 'lucide-react'
 
 export async function MainNav() {
     const supabase = createClient()
@@ -45,6 +46,14 @@ export async function MainNav() {
                         {isAdmin && (
                             <Button asChild variant="default" size="sm" className="bg-uo-navy hover:bg-uo-navy-light">
                                 <Link href="/admin">Panel Admin</Link>
+                            </Button>
+                        )}
+                        {user && (
+                            <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
+                                <Link href="/profile">
+                                    <User className="mr-1 h-4 w-4" />
+                                    Mi perfil
+                                </Link>
                             </Button>
                         )}
                         {!user ? (

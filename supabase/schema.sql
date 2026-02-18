@@ -106,6 +106,30 @@ create policy "Only Admins can delete videos."
     exists ( select 1 from profiles where id = auth.uid() and is_admin = true )
   );
 
+-- FAVORITES TABLE
+create table public.favorites (
+  id uuid default uuid_generate_v4() primary key,
+  user_id uuid references public.profiles(id) on delete cascade not null,
+  item_type text not null check (item_type in ('prompt', 'video')),
+  item_id uuid not null,
+  created_at timestamptz default timezone('utc'::text, now()) not null,
+  unique(user_id, item_type, item_id)
+);
+
+alter table public.favorites enable row level security;
+
+create policy "Users can view own favorites."
+  on favorites for select
+  using ( auth.uid() = user_id );
+
+create policy "Users can add favorites."
+  on favorites for insert
+  with check ( auth.uid() = user_id );
+
+create policy "Users can remove favorites."
+  on favorites for delete
+  using ( auth.uid() = user_id );
+
 -- FUNCTION TO HANDLE NEW USER SIGNUP
 create or replace function public.handle_new_user() 
 returns trigger as $$
