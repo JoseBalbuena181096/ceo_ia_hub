@@ -80,8 +80,8 @@ export async function resetPassword(formData: FormData) {
     })
 
     if (error) {
-        console.error(error)
-        return redirect('/login?error=Error al enviar correo. Intenta de nuevo.')
+        console.error('resetPassword error:', error.message, 'origin:', origin)
+        return redirect(`/login?error=${encodeURIComponent(error.message)}`)
     }
 
     return redirect('/login?message=Si el correo existe, recibirás un enlace para restablecer tu contraseña.')
