@@ -6,6 +6,16 @@ import { headers } from 'next/headers'
 
 import { createClient } from '@/lib/supabase/server'
 
+async function getOrigin() {
+    const headersList = await headers()
+    const host = headersList.get('x-forwarded-host') || headersList.get('host')
+    if (host) {
+        const protocol = headersList.get('x-forwarded-proto') || 'https'
+        return `${protocol}://${host}`
+    }
+    return 'http://localhost:3000'
+}
+
 export async function login(formData: FormData) {
     const supabase = await createClient()
 
@@ -33,10 +43,7 @@ export async function signup(formData: FormData) {
     const fullName = formData.get('fullName') as string
     const department = formData.get('department') as string
 
-    const headersList = await headers()
-    const origin = headersList.get('origin') || headersList.get('x-forwarded-host')
-        ? `https://${headersList.get('x-forwarded-host')}`
-        : 'http://localhost:3000'
+    const origin = await getOrigin()
 
     const { error } = await supabase.auth.signUp({
         email,
@@ -66,10 +73,7 @@ export async function resetPassword(formData: FormData) {
         return redirect('/login?error=Ingresa tu correo electrónico')
     }
 
-    const headersList = await headers()
-    const origin = headersList.get('origin') || headersList.get('x-forwarded-host')
-        ? `https://${headersList.get('x-forwarded-host')}`
-        : 'http://localhost:3000'
+    const origin = await getOrigin()
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${origin}/auth/reset-password`,
