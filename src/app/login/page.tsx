@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { login, signup } from './actions'
+import Link from 'next/link'
+import { login, signup, resetPassword } from './actions'
 
 export const metadata: Metadata = { title: 'Iniciar Sesión' }
 import { Label } from '@/components/ui/label'
@@ -59,6 +60,16 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                                 >
                                     Entrar
                                 </SubmitButton>
+                                <div className="text-center">
+                                    <SubmitButton
+                                        variant="link"
+                                        className="text-sm text-muted-foreground hover:text-foreground p-0 h-auto"
+                                        loadingText="Enviando..."
+                                        formAction={resetPassword}
+                                    >
+                                        ¿Olvidaste tu contraseña?
+                                    </SubmitButton>
+                                </div>
                             </form>
                         </TabsContent>
 
