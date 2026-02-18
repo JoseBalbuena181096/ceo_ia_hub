@@ -146,7 +146,7 @@ export function VideoCard({ title, url, category, duration }: VideoCardProps) {
                         ) : (
                             <div className="flex items-center justify-center h-full bg-gray-900 text-white p-4 text-center flex-col gap-2">
                                 <p>Formato no soportado para preview.</p>
-                                <a href={url} target="_blank" rel="noopener noreferrer" className="text-indigo-400 underline">
+                                <a href={url} target="_blank" rel="noopener noreferrer" className="text-uo-sky underline">
                                     Abrir video original
                                 </a>
                             </div>

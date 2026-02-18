@@ -61,7 +61,7 @@ export function MobileNav({ isAdmin, isLoggedIn }: MobileNavProps) {
                             <Link
                                 href="/admin"
                                 onClick={() => setOpen(false)}
-                                className="rounded-md px-3 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors"
+                                className="rounded-md px-3 py-2 text-sm font-medium text-uo-navy hover:bg-uo-blue/10 dark:text-uo-blue dark:hover:bg-uo-blue/10 transition-colors"
                             >
                                 Panel Admin
                             </Link>

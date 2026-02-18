@@ -16,7 +16,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
             <Card className="w-full max-w-md">
                 <CardHeader className="text-center pb-2">
-                    <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-indigo-600 flex items-center justify-center">
+                    <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-uo-navy flex items-center justify-center">
                         <span className="text-white font-bold text-xl">CEO</span>
                     </div>
                     <CardTitle className="text-2xl font-bold">CEO AI Hub</CardTitle>
@@ -53,7 +53,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                                     <Input id="password" name="password" type="password" required />
                                 </div>
                                 <SubmitButton
-                                    className="w-full bg-indigo-600 hover:bg-indigo-700"
+                                    className="w-full bg-uo-navy hover:bg-uo-navy-light"
                                     loadingText="Ingresando..."
                                     formAction={login}
                                 >

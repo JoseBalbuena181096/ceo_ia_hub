@@ -43,7 +43,7 @@ export async function MainNav() {
                     </Link>
                     <nav className="flex items-center gap-2">
                         {isAdmin && (
-                            <Button asChild variant="default" size="sm" className="bg-indigo-600 hover:bg-indigo-700">
+                            <Button asChild variant="default" size="sm" className="bg-uo-navy hover:bg-uo-navy-light">
                                 <Link href="/admin">Panel Admin</Link>
                             </Button>
                         )}

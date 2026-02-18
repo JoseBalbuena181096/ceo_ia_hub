@@ -31,7 +31,7 @@ export default async function AdminLayout({
         <div className="flex min-h-screen flex-col md:flex-row">
             <aside className="w-full md:w-64 border-r bg-muted/40 p-6 flex flex-col gap-6">
                 <div className="flex items-center gap-2 px-2">
-                    <LayoutDashboard className="h-6 w-6 text-indigo-600" />
+                    <LayoutDashboard className="h-6 w-6 text-uo-navy dark:text-uo-blue" />
                     <span className="font-bold text-lg">Panel Admin</span>
                 </div>
                 <nav className="flex flex-col gap-2">
