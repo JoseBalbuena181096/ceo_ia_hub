@@ -45,15 +45,15 @@ export default async function AdminUsersPage() {
                                         </Badge>
                                     </TableCell>
                                     <TableCell>
-                                        <Badge variant={user.is_blocked ? 'destructive' : 'outline'}>
-                                            {user.is_blocked ? 'Bloqueado' : 'Activo'}
+                                        <Badge variant={(user.is_blocked ?? false) ? 'destructive' : 'outline'}>
+                                            {(user.is_blocked ?? false) ? 'Bloqueado' : 'Activo'}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
                                         {!user.is_admin && (
                                             <ToggleBlockButton
                                                 action={toggleBlockUser.bind(null, user.id)}
-                                                isBlocked={user.is_blocked}
+                                                isBlocked={user.is_blocked ?? false}
                                                 userName={user.full_name || 'este usuario'}
                                             />
                                         )}

@@ -8,6 +8,7 @@ create table public.profiles (
   full_name text,
   department text,
   is_admin boolean default false,
+  is_blocked boolean default false,
   updated_at timestamp with time zone
 );
 
@@ -24,6 +25,12 @@ create policy "Users can insert their own profile."
 create policy "Users can update own profile."
   on profiles for update
   using ( auth.uid() = id );
+
+create policy "Admins can update any profile."
+  on profiles for update
+  using (
+    exists ( select 1 from profiles where id = auth.uid() and is_admin = true )
+  );
 
 -- PROMPTS TABLE
 -- Removed enum constraint to allow dynamic categories
