@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { VideoCard } from '@/components/video-card'
 import { Search } from '@/components/search'
 import { Badge } from '@/components/ui/badge'
+import { MainNav } from '@/components/main-nav'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -42,6 +43,8 @@ export default async function LearningPage({
     const categories = categoriesData?.map((c: { name: string }) => c.name) || []
 
     return (
+        <>
+        <MainNav />
         <div className="container py-8 md:py-12 mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
                 <div>
@@ -89,5 +92,6 @@ export default async function LearningPage({
                 )}
             </div>
         </div>
+        </>
     )
 }
