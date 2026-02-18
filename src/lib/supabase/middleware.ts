@@ -52,10 +52,30 @@ export async function updateSession(request: NextRequest) {
             !request.nextUrl.pathname.startsWith('/login') &&
             !request.nextUrl.pathname.startsWith('/auth')
         ) {
-            // no user, potentially respond by redirecting the user to the login page
             const url = request.nextUrl.clone()
             url.pathname = '/login'
             return NextResponse.redirect(url)
+        }
+
+        // Check if user is blocked
+        if (
+            user &&
+            !request.nextUrl.pathname.startsWith('/login') &&
+            !request.nextUrl.pathname.startsWith('/auth')
+        ) {
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('is_blocked')
+                .eq('id', user.id)
+                .single()
+
+            if (profile?.is_blocked) {
+                await supabase.auth.signOut()
+                const url = request.nextUrl.clone()
+                url.pathname = '/login'
+                url.searchParams.set('error', 'Tu cuenta ha sido bloqueada. Contacta al administrador.')
+                return NextResponse.redirect(url)
+            }
         }
     } catch (e) {
         console.error('Middleware Supabase Error:', e)

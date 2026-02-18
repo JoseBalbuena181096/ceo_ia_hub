@@ -15,6 +15,7 @@ export interface Database {
                     full_name: string | null
                     department: string | null
                     is_admin: boolean
+                    is_blocked: boolean
                     updated_at: string | null
                 }
                 Insert: {
@@ -22,6 +23,7 @@ export interface Database {
                     full_name?: string | null
                     department?: string | null
                     is_admin?: boolean
+                    is_blocked?: boolean
                     updated_at?: string | null
                 }
                 Update: {
@@ -29,6 +31,7 @@ export interface Database {
                     full_name?: string | null
                     department?: string | null
                     is_admin?: boolean
+                    is_blocked?: boolean
                     updated_at?: string | null
                 }
             }

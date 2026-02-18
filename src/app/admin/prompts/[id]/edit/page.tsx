@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { createPrompt } from '@/app/admin/actions'
+import { notFound } from 'next/navigation'
+import { updatePrompt } from '@/app/admin/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -19,8 +20,18 @@ import { Breadcrumb } from '@/components/breadcrumb'
 
 export const dynamic = 'force-dynamic'
 
-export default async function NewPromptPage() {
+export default async function EditPromptPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
     const supabase = await createClient()
+
+    const { data: prompt } = await supabase
+        .from('prompts')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+    if (!prompt) notFound()
+
     const { data: categories } = await supabase
         .from('prompt_categories')
         .select('*')
@@ -31,10 +42,10 @@ export default async function NewPromptPage() {
             <Breadcrumb items={[
                 { label: 'Dashboard', href: '/admin' },
                 { label: 'Prompts', href: '/admin/prompts' },
-                { label: 'Nuevo' },
+                { label: 'Editar' },
             ]} />
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold tracking-tight">Crear Nuevo Prompt</h1>
+                <h1 className="text-2xl font-bold tracking-tight">Editar Prompt</h1>
                 <Button variant="outline" asChild>
                     <Link href="/admin/prompts">Cancelar</Link>
                 </Button>
@@ -43,18 +54,18 @@ export default async function NewPromptPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Detalles del Prompt</CardTitle>
-                    <CardDescription>Ingresa la información para agregar al catálogo.</CardDescription>
+                    <CardDescription>Modifica la información del prompt.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <ClientForm action={createPrompt} className="space-y-6" redirectPath="/admin/prompts">
+                    <ClientForm action={updatePrompt.bind(null, id)} className="space-y-6" redirectPath="/admin/prompts">
                         <div className="space-y-2">
                             <Label htmlFor="title">Título</Label>
-                            <Input id="title" name="title" placeholder="Ej. Generador de Correos RRHH" required />
+                            <Input id="title" name="title" defaultValue={prompt.title} required />
                         </div>
 
                         <div className="space-y-2">
                             <Label htmlFor="category">Categoría</Label>
-                            <Select name="category" required>
+                            <Select name="category" defaultValue={prompt.category} required>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar categoría" />
                                 </SelectTrigger>
@@ -70,7 +81,7 @@ export default async function NewPromptPage() {
 
                         <div className="space-y-2">
                             <Label htmlFor="tags">Etiquetas (separadas por coma)</Label>
-                            <Input id="tags" name="tags" placeholder="ej. email, productividad, rrhh" />
+                            <Input id="tags" name="tags" defaultValue={prompt.tags?.join(', ') || ''} />
                         </div>
 
                         <div className="space-y-2">
@@ -78,13 +89,13 @@ export default async function NewPromptPage() {
                             <Textarea
                                 id="content"
                                 name="content"
-                                placeholder="Actúa como un experto en..."
+                                defaultValue={prompt.content}
                                 className="min-h-[200px] font-mono text-sm"
                                 required
                             />
                         </div>
 
-                        <SubmitButton className="w-full" loadingText="Guardando prompt...">Guardar Prompt</SubmitButton>
+                        <SubmitButton className="w-full" loadingText="Guardando cambios...">Guardar Cambios</SubmitButton>
                     </ClientForm>
                 </CardContent>
             </Card>

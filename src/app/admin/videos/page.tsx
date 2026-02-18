@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { deleteVideo } from '@/app/admin/actions'
-import { Plus, ExternalLink } from 'lucide-react'
+import { Plus, ExternalLink, Pencil } from 'lucide-react'
 import { ConfirmDelete } from '@/components/confirm-delete'
 
 export const dynamic = 'force-dynamic'
@@ -50,7 +50,12 @@ export default async function AdminVideosPage() {
                                             Link <ExternalLink className="h-3 w-3" />
                                         </a>
                                     </TableCell>
-                                    <TableCell className="text-right">
+                                    <TableCell className="text-right flex items-center justify-end gap-1">
+                                        <Button asChild variant="ghost" size="sm">
+                                            <Link href={`/admin/videos/${video.id}/edit`}>
+                                                <Pencil className="h-4 w-4" />
+                                            </Link>
+                                        </Button>
                                         <ConfirmDelete
                                             action={deleteVideo.bind(null, video.id)}
                                             itemName={video.title}

@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import { createPrompt } from '@/app/admin/actions'
+import { notFound } from 'next/navigation'
+import { updateVideo } from '@/app/admin/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { createClient } from '@/lib/supabase/server'
 import { ClientForm } from '@/components/client-form'
 import { SubmitButton } from '@/components/submit-button'
@@ -19,8 +19,18 @@ import { Breadcrumb } from '@/components/breadcrumb'
 
 export const dynamic = 'force-dynamic'
 
-export default async function NewPromptPage() {
+export default async function EditVideoPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
     const supabase = await createClient()
+
+    const { data: video } = await supabase
+        .from('videos')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+    if (!video) notFound()
+
     const { data: categories } = await supabase
         .from('prompt_categories')
         .select('*')
@@ -30,31 +40,31 @@ export default async function NewPromptPage() {
         <div className="max-w-2xl mx-auto">
             <Breadcrumb items={[
                 { label: 'Dashboard', href: '/admin' },
-                { label: 'Prompts', href: '/admin/prompts' },
-                { label: 'Nuevo' },
+                { label: 'Videos', href: '/admin/videos' },
+                { label: 'Editar' },
             ]} />
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold tracking-tight">Crear Nuevo Prompt</h1>
+                <h1 className="text-2xl font-bold tracking-tight">Editar Video</h1>
                 <Button variant="outline" asChild>
-                    <Link href="/admin/prompts">Cancelar</Link>
+                    <Link href="/admin/videos">Cancelar</Link>
                 </Button>
             </div>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Detalles del Prompt</CardTitle>
-                    <CardDescription>Ingresa la información para agregar al catálogo.</CardDescription>
+                    <CardTitle>Detalles del Video</CardTitle>
+                    <CardDescription>Modifica la información del video.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <ClientForm action={createPrompt} className="space-y-6" redirectPath="/admin/prompts">
+                    <ClientForm action={updateVideo.bind(null, id)} className="space-y-6" redirectPath="/admin/videos">
                         <div className="space-y-2">
                             <Label htmlFor="title">Título</Label>
-                            <Input id="title" name="title" placeholder="Ej. Generador de Correos RRHH" required />
+                            <Input id="title" name="title" defaultValue={video.title} required />
                         </div>
 
                         <div className="space-y-2">
                             <Label htmlFor="category">Categoría</Label>
-                            <Select name="category" required>
+                            <Select name="category" defaultValue={video.category} required>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar categoría" />
                                 </SelectTrigger>
@@ -69,22 +79,16 @@ export default async function NewPromptPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="tags">Etiquetas (separadas por coma)</Label>
-                            <Input id="tags" name="tags" placeholder="ej. email, productividad, rrhh" />
+                            <Label htmlFor="url">URL (YouTube o TikTok)</Label>
+                            <Input id="url" name="url" defaultValue={video.url} required />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="content">Contenido del Prompt</Label>
-                            <Textarea
-                                id="content"
-                                name="content"
-                                placeholder="Actúa como un experto en..."
-                                className="min-h-[200px] font-mono text-sm"
-                                required
-                            />
+                            <Label htmlFor="duration">Duración (opcional)</Label>
+                            <Input id="duration" name="duration" defaultValue={video.duration || ''} />
                         </div>
 
-                        <SubmitButton className="w-full" loadingText="Guardando prompt...">Guardar Prompt</SubmitButton>
+                        <SubmitButton className="w-full" loadingText="Guardando cambios...">Guardar Cambios</SubmitButton>
                     </ClientForm>
                 </CardContent>
             </Card>

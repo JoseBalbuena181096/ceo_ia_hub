@@ -14,6 +14,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Breadcrumb } from '@/components/breadcrumb'
 
 export default async function NewVideoPage() {
     const supabase = await createClient()
@@ -24,6 +25,11 @@ export default async function NewVideoPage() {
 
     return (
         <div className="max-w-2xl mx-auto">
+            <Breadcrumb items={[
+                { label: 'Dashboard', href: '/admin' },
+                { label: 'Videos', href: '/admin/videos' },
+                { label: 'Nuevo' },
+            ]} />
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold tracking-tight">Agregar Nuevo Video</h1>
                 <Button variant="outline" asChild>

@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { deletePrompt } from '@/app/admin/actions'
-import { Plus } from 'lucide-react'
+import { Plus, Pencil } from 'lucide-react'
 import { ConfirmDelete } from '@/components/confirm-delete'
 
 export const dynamic = 'force-dynamic'
@@ -44,7 +44,12 @@ export default async function AdminPromptsPage() {
                                     <TableCell className="font-medium">{prompt.title}</TableCell>
                                     <TableCell>{prompt.category}</TableCell>
                                     <TableCell>{prompt.tags?.join(', ')}</TableCell>
-                                    <TableCell className="text-right">
+                                    <TableCell className="text-right flex items-center justify-end gap-1">
+                                        <Button asChild variant="ghost" size="sm">
+                                            <Link href={`/admin/prompts/${prompt.id}/edit`}>
+                                                <Pencil className="h-4 w-4" />
+                                            </Link>
+                                        </Button>
                                         <ConfirmDelete
                                             action={deletePrompt.bind(null, prompt.id)}
                                             itemName={prompt.title}
