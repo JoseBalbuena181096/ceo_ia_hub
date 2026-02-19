@@ -30,7 +30,7 @@ export default async function SearchPage({
             supabase
                 .from('prompts')
                 .select('*')
-                .or(`title.ilike.%${query}%,content.ilike.%${query}%`)
+                .or(`title.ilike.%${query}%,content.ilike.%${query}%,description.ilike.%${query}%`)
                 .order('created_at', { ascending: false })
                 .limit(12),
             supabase
@@ -100,6 +100,7 @@ export default async function SearchPage({
                                 <PromptCard
                                     key={prompt.id}
                                     title={prompt.title}
+                                    description={prompt.description}
                                     content={prompt.content}
                                     category={prompt.category}
                                     tags={prompt.tags}

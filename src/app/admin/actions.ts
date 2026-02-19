@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 export async function createPrompt(formData: FormData) {
     const supabase = await createClient()
     const title = formData.get('title') as string
+    const description = (formData.get('description') as string) || null
     const content = formData.get('content') as string
     const category = formData.get('category') as string
     const tagsString = formData.get('tags') as string
@@ -15,6 +16,7 @@ export async function createPrompt(formData: FormData) {
     // Cast to any to bypass strict type checking on insert
     const { error } = await (supabase as any).from('prompts').insert({
         title,
+        description,
         content,
         category: category,
         tags,
@@ -33,6 +35,7 @@ export async function createPrompt(formData: FormData) {
 export async function updatePrompt(id: string, formData: FormData) {
     const supabase = await createClient()
     const title = formData.get('title') as string
+    const description = (formData.get('description') as string) || null
     const content = formData.get('content') as string
     const category = formData.get('category') as string
     const tagsString = formData.get('tags') as string
@@ -41,6 +44,7 @@ export async function updatePrompt(id: string, formData: FormData) {
 
     const { error } = await (supabase as any).from('prompts').update({
         title,
+        description,
         content,
         category,
         tags,

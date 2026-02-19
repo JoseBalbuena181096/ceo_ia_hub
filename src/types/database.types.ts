@@ -39,6 +39,7 @@ export interface Database {
                 Row: {
                     id: string
                     title: string
+                    description: string | null
                     content: string
                     category: string
                     tags: string[] | null
@@ -48,6 +49,7 @@ export interface Database {
                 Insert: {
                     id?: string
                     title: string
+                    description?: string | null
                     content: string
                     category: string
                     tags?: string[] | null
@@ -57,6 +59,7 @@ export interface Database {
                 Update: {
                     id?: string
                     title?: string
+                    description?: string | null
                     content?: string
                     category?: string
                     tags?: string[] | null

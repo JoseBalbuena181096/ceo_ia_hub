@@ -52,6 +52,7 @@ export default async function AdminPromptsPage({
                     <TableHeader>
                         <TableRow>
                             <TableHead>Título</TableHead>
+                            <TableHead>Descripción</TableHead>
                             <TableHead>Categoría</TableHead>
                             <TableHead>Tags</TableHead>
                             <TableHead className="text-right">Acciones</TableHead>
@@ -62,6 +63,7 @@ export default async function AdminPromptsPage({
                             prompts.map((prompt) => (
                                 <TableRow key={prompt.id}>
                                     <TableCell className="font-medium">{prompt.title}</TableCell>
+                                    <TableCell className="max-w-[200px] truncate text-muted-foreground text-sm">{prompt.description || '—'}</TableCell>
                                     <TableCell>{prompt.category}</TableCell>
                                     <TableCell>{prompt.tags?.join(', ')}</TableCell>
                                     <TableCell className="text-right flex items-center justify-end gap-1">
@@ -79,7 +81,7 @@ export default async function AdminPromptsPage({
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={4} className="h-24 text-center">
+                                <TableCell colSpan={5} className="h-24 text-center">
                                     <p className="text-muted-foreground mb-2">No hay prompts registrados.</p>
                                     <Button asChild variant="outline" size="sm">
                                         <Link href="/admin/prompts/new">

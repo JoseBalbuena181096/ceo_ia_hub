@@ -32,7 +32,7 @@ export default async function LibraryPage({
     // Count total for pagination
     let countQuery = supabase.from('prompts').select('*', { count: 'exact', head: true })
     if (query) {
-        countQuery = countQuery.or(`title.ilike.%${query}%,content.ilike.%${query}%`)
+        countQuery = countQuery.or(`title.ilike.%${query}%,content.ilike.%${query}%,description.ilike.%${query}%`)
     }
     if (category) {
         countQuery = countQuery.eq('category', category)
@@ -51,7 +51,7 @@ export default async function LibraryPage({
         .range(from, to)
 
     if (query) {
-        request = request.or(`title.ilike.%${query}%,content.ilike.%${query}%`)
+        request = request.or(`title.ilike.%${query}%,content.ilike.%${query}%,description.ilike.%${query}%`)
     }
     if (category) {
         request = request.eq('category', category)
@@ -118,6 +118,7 @@ export default async function LibraryPage({
                         <PromptCard
                             key={prompt.id}
                             title={prompt.title}
+                            description={prompt.description}
                             content={prompt.content}
                             category={prompt.category}
                             tags={prompt.tags}

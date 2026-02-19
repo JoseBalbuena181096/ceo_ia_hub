@@ -127,6 +127,7 @@ export default async function ProfilePage() {
                                     <PromptCard
                                         key={prompt.id}
                                         title={prompt.title}
+                                        description={prompt.description}
                                         content={prompt.content}
                                         category={prompt.category}
                                         tags={prompt.tags}

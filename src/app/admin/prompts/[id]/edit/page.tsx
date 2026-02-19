@@ -64,6 +64,17 @@ export default async function EditPromptPage({ params }: { params: Promise<{ id:
                         </div>
 
                         <div className="space-y-2">
+                            <Label htmlFor="description">Descripción</Label>
+                            <Textarea
+                                id="description"
+                                name="description"
+                                defaultValue={prompt.description || ''}
+                                placeholder="Breve descripción de qué hace este prompt..."
+                                className="min-h-[80px] text-sm"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
                             <Label htmlFor="category">Categoría</Label>
                             <Select name="category" defaultValue={prompt.category} required>
                                 <SelectTrigger>

@@ -11,6 +11,7 @@ import { toggleFavorite } from "@/app/profile/actions"
 
 interface PromptCardProps {
     title: string
+    description?: string | null
     content: string
     category: string
     tags?: string[] | null
@@ -18,7 +19,7 @@ interface PromptCardProps {
     isFavorited?: boolean
 }
 
-export function PromptCard({ title, content, category, tags, promptId, isFavorited = false }: PromptCardProps) {
+export function PromptCard({ title, description, content, category, tags, promptId, isFavorited = false }: PromptCardProps) {
     const [copied, setCopied] = useState(false)
     const [favorited, setFavorited] = useState(isFavorited)
     const [favLoading, setFavLoading] = useState(false)
@@ -73,7 +74,10 @@ export function PromptCard({ title, content, category, tags, promptId, isFavorit
                     </div>
                 )}
             </CardHeader>
-            <CardContent className="flex-1">
+            <CardContent className="flex-1 space-y-3">
+                {description && (
+                    <p className="text-sm text-muted-foreground">{description}</p>
+                )}
                 <div className="bg-muted/50 p-3 rounded-md text-sm font-mono whitespace-pre-wrap max-h-[200px] overflow-y-auto relative group">
                     {content}
                 </div>
