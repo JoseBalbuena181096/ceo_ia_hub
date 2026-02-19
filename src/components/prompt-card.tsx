@@ -46,7 +46,7 @@ export function PromptCard({ title, description, content, category, tags, prompt
     }
 
     return (
-        <Card className="flex flex-col h-full hover:shadow-md transition-shadow">
+        <Card className="flex flex-col h-full hover:shadow-md transition-shadow overflow-hidden">
             <CardHeader className="pb-3">
                 <div className="flex justify-between items-start gap-2">
                     <CardTitle className="text-lg font-semibold leading-tight">{title}</CardTitle>
@@ -76,7 +76,7 @@ export function PromptCard({ title, description, content, category, tags, prompt
             </CardHeader>
             <CardContent className="flex-1 space-y-3">
                 {description && (
-                    <p className="text-sm text-muted-foreground">{description}</p>
+                    <p className="text-sm text-muted-foreground text-justify break-words overflow-hidden">{description}</p>
                 )}
                 <div className="bg-muted/50 p-3 rounded-md text-sm font-mono whitespace-pre-wrap max-h-[200px] overflow-y-auto relative group">
                     {content}
