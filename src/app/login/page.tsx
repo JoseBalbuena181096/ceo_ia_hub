@@ -18,10 +18,9 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
             <Card className="w-full max-w-md">
                 <CardHeader className="text-center pb-2">
-                    <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-viad-navy flex items-center justify-center">
-                        <ViadLogo className="h-7 w-7" color="white" />
+                    <div className="mx-auto mb-4">
+                        <ViadLogo full className="h-8 w-auto" color="#00205c" />
                     </div>
-                    <CardTitle className="text-2xl font-bold">VIAD HUB IA</CardTitle>
                     <CardDescription>Acceso para personal del Consorcio</CardDescription>
                 </CardHeader>
                 <CardContent>

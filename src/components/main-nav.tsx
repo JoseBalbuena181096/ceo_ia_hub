@@ -25,11 +25,8 @@ export async function MainNav() {
                 <MobileNav isAdmin={isAdmin} isLoggedIn={!!user} />
 
                 <div className="mr-4 hidden md:flex">
-                    <Link href="/" className="mr-6 flex items-center space-x-2">
-                        <ViadLogo className="h-5 w-auto" />
-                        <span className="hidden font-bold sm:inline-block text-sm">
-                            HUB IA
-                        </span>
+                    <Link href="/" className="mr-6 flex items-center">
+                        <ViadLogo full className="h-5 w-auto" />
                     </Link>
                     <nav className="flex items-center gap-6 text-sm">
                         <Link href="/library" className="transition-colors hover:text-foreground/80 text-foreground/60">
@@ -41,9 +38,8 @@ export async function MainNav() {
                     </nav>
                 </div>
                 <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-                    <Link href="/" className="flex items-center gap-1.5 font-bold md:hidden">
-                        <ViadLogo className="h-4 w-auto" />
-                        <span className="text-sm">HUB IA</span>
+                    <Link href="/" className="flex items-center md:hidden">
+                        <ViadLogo full className="h-4 w-auto" />
                     </Link>
                     <nav className="flex items-center gap-2">
                         {isAdmin && (
