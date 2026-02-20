@@ -37,7 +37,7 @@ export default async function AdminUsersPage() {
                 </div>
                 <div className="rounded-lg border p-4">
                     <p className="text-sm text-muted-foreground">Bloqueados</p>
-                    <p className="text-2xl font-bold text-uo-red">{blockedCount}</p>
+                    <p className="text-2xl font-bold text-viad-orange">{blockedCount}</p>
                 </div>
             </div>
 

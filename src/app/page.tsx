@@ -7,9 +7,9 @@ import { Sparkles, BookOpen, LayoutGrid, ExternalLink } from 'lucide-react'
 import { HomeSearch } from '@/components/home-search'
 
 const toolIcons: Record<string, React.ReactNode> = {
-  Sparkles: <Sparkles className="h-6 w-6 text-uo-blue" />,
-  BookOpen: <BookOpen className="h-6 w-6 text-uo-green" />,
-  LayoutGrid: <LayoutGrid className="h-6 w-6 text-uo-sky" />,
+  Sparkles: <Sparkles className="h-6 w-6 text-viad-blue" />,
+  BookOpen: <BookOpen className="h-6 w-6 text-viad-purple" />,
+  LayoutGrid: <LayoutGrid className="h-6 w-6 text-viad-lavender" />,
 }
 
 export default function Home() {
@@ -20,14 +20,14 @@ export default function Home() {
         {/* Hero */}
         <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32 bg-gradient-to-b from-white to-gray-100 dark:from-gray-950 dark:to-gray-900 border-b">
           <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-uo-navy to-uo-blue">
-              CEO AI Hub
+            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-viad-navy to-viad-blue">
+              VIAD HUB IA
             </h1>
             <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-              La plataforma central de Inteligencia Artificial para el Consorcio Educativo Oriente.
+              Plataforma de Inteligencia Artificial de la VIAD — Consorcio Educativo Oriente.
             </p>
             <div className="space-x-4">
-              <Button asChild size="lg" className="bg-uo-navy hover:bg-uo-navy-light">
+              <Button asChild size="lg" className="bg-viad-navy hover:bg-viad-navy-light">
                 <Link href="/library">Explorar Prompts</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
@@ -74,7 +74,7 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="group"
                 >
-                  <Card className="h-full border border-gray-200 dark:border-gray-800 hover:shadow-lg hover:border-uo-blue/40 dark:hover:border-uo-blue/50 transition-all duration-200">
+                  <Card className="h-full border border-gray-200 dark:border-gray-800 hover:shadow-lg hover:border-viad-blue/40 dark:hover:border-viad-blue/50 transition-all duration-200">
                     <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2">
                       <div className="rounded-lg bg-gray-100 dark:bg-gray-800 p-2.5">
                         {toolIcons[tool.icon]}
@@ -113,10 +113,10 @@ export default function Home() {
       <footer className="border-t bg-white dark:bg-gray-950">
         <div className="container flex flex-col items-center justify-between gap-4 py-6 md:h-16 md:flex-row md:py-0 mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm text-muted-foreground md:text-left">
-            Construido para el Consorcio Educativo Oriente.
+            Construido por la VIAD — Consorcio Educativo Oriente.
           </p>
           <p className="text-center text-xs text-muted-foreground/60 md:text-right">
-            CEO AI Hub &copy; {new Date().getFullYear()}
+            VIAD HUB IA &copy; {new Date().getFullYear()}
           </p>
         </div>
       </footer>

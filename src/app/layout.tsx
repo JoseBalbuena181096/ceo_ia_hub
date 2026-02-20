@@ -1,12 +1,23 @@
 import type { Metadata } from "next";
-import { Poppins, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+const monda = localFont({
+  src: "./fonts/Monda.ttf",
+  variable: "--font-monda",
+  display: "swap",
+});
+
+const nexa = localFont({
+  src: [
+    { path: "./fonts/NexaLight.otf", weight: "300", style: "normal" },
+    { path: "./fonts/NexaRegular.otf", weight: "400", style: "normal" },
+    { path: "./fonts/NexaXBold.otf", weight: "700", style: "normal" },
+    { path: "./fonts/NexaHeavy.otf", weight: "900", style: "normal" },
+  ],
+  variable: "--font-nexa",
   display: "swap",
 });
 
@@ -18,10 +29,10 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "CEO AI Hub",
-    template: "%s | CEO AI Hub",
+    default: "VIAD HUB IA",
+    template: "%s | VIAD HUB IA",
   },
-  description: "Plataforma central de Inteligencia Artificial para el Consorcio Educativo Oriente.",
+  description: "Plataforma de Inteligencia Artificial de la Vicerrectoría de Inteligencia Artificial y Desarrollo Tecnológico Aplicado (VIAD) del Consorcio Educativo Oriente.",
 };
 
 export default function RootLayout({
@@ -32,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body
-        className={`${poppins.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${monda.variable} ${nexa.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
         <Toaster />

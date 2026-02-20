@@ -9,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SubmitButton } from '@/components/submit-button'
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
+import { ViadLogo } from '@/components/viad-logo'
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ message?: string, error?: string }> }) {
     const params = await searchParams
@@ -17,10 +18,10 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
             <Card className="w-full max-w-md">
                 <CardHeader className="text-center pb-2">
-                    <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-uo-navy flex items-center justify-center">
-                        <span className="text-white font-bold text-xl">CEO</span>
+                    <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-viad-navy flex items-center justify-center">
+                        <ViadLogo className="h-7 w-7" color="white" />
                     </div>
-                    <CardTitle className="text-2xl font-bold">CEO AI Hub</CardTitle>
+                    <CardTitle className="text-2xl font-bold">VIAD HUB IA</CardTitle>
                     <CardDescription>Acceso para personal del Consorcio</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -54,7 +55,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                                     <Input id="password" name="password" type="password" required />
                                 </div>
                                 <SubmitButton
-                                    className="w-full bg-uo-navy hover:bg-uo-navy-light"
+                                    className="w-full bg-viad-navy hover:bg-viad-navy-light"
                                     loadingText="Ingresando..."
                                     formAction={login}
                                 >

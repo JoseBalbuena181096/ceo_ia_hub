@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { MobileNav } from '@/components/mobile-nav'
 import { User } from 'lucide-react'
+import { ViadLogo } from '@/components/viad-logo'
 
 export async function MainNav() {
     const supabase = createClient()
@@ -25,8 +26,9 @@ export async function MainNav() {
 
                 <div className="mr-4 hidden md:flex">
                     <Link href="/" className="mr-6 flex items-center space-x-2">
-                        <span className="hidden font-bold sm:inline-block">
-                            CEO AI Hub
+                        <ViadLogo className="h-5 w-auto" />
+                        <span className="hidden font-bold sm:inline-block text-sm">
+                            HUB IA
                         </span>
                     </Link>
                     <nav className="flex items-center gap-6 text-sm">
@@ -39,12 +41,13 @@ export async function MainNav() {
                     </nav>
                 </div>
                 <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-                    <Link href="/" className="font-bold md:hidden">
-                        CEO AI Hub
+                    <Link href="/" className="flex items-center gap-1.5 font-bold md:hidden">
+                        <ViadLogo className="h-4 w-auto" />
+                        <span className="text-sm">HUB IA</span>
                     </Link>
                     <nav className="flex items-center gap-2">
                         {isAdmin && (
-                            <Button asChild variant="default" size="sm" className="bg-uo-navy hover:bg-uo-navy-light">
+                            <Button asChild variant="default" size="sm" className="bg-viad-navy hover:bg-viad-navy-light">
                                 <Link href="/admin">Panel Admin</Link>
                             </Button>
                         )}

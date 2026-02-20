@@ -29,7 +29,7 @@ export default async function AdminDashboard() {
         <div className="space-y-8 p-8 pt-6">
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">Dashboard General</h1>
-                <p className="text-muted-foreground">Bienvenido al panel de administración del CEO AI Hub.</p>
+                <p className="text-muted-foreground">Bienvenido al panel de administración del VIAD HUB IA.</p>
             </div>
 
             {/* Stats */}

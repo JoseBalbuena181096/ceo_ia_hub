@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-CEO AI Hub — an internal knowledge management platform for "Consorcio Educativo Oriente" (CEO). It serves as an AI manifesto portal, a prompt library, a micro-learning video catalog, a quick-access tool center (Gemini, NotebookLM, Workspace), and a user management panel. The UI and content are in **Spanish**.
+VIAD HUB IA — an internal knowledge management platform for the **Vicerrectoría de Inteligencia Artificial y Desarrollo Tecnológico Aplicado (VIAD)** of "Consorcio Educativo Oriente" (CEO). It serves as an AI manifesto portal, a prompt library, a micro-learning video catalog, a quick-access tool center (Gemini, NotebookLM, Workspace), and a user management panel. The UI and content are in **Spanish**.
 
 ## Commands
 
@@ -21,7 +21,17 @@ There are no test scripts configured.
 - **Tailwind CSS v4** + **shadcn/ui** (new-york style, `@/components/ui/`)
 - **Icons:** lucide-react
 - **Notifications:** sonner (toast)
+- **Fonts:** Monda (body, local TTF), Nexa family (headings, local OTF), JetBrains Mono (code, Google)
 - Path alias: `@/*` → `./src/*`
+
+## Brand / Visual Identity
+
+- **Name:** VIAD HUB IA
+- **Primary color:** `#00205c` (VIAD Navy) — CSS token `viad-navy`
+- **Secondary color:** `#94c9ed` (VIAD Light Blue) — CSS token `viad-blue`
+- **Accent colors:** `viad-orange` (#e25027), `viad-purple` (#87497a), `viad-salmon` (#f4c0b5), `viad-lavender` (#c0b0d7)
+- **Logo component:** `src/components/viad-logo.tsx` — SVG wordmark "VIAD"
+- **Favicon:** `src/app/icon.tsx` — dynamic "V" on navy background
 
 ## Architecture
 
@@ -85,7 +95,8 @@ Actions call `revalidatePath()` on affected routes after mutations.
 
 ### Reusable Components
 
-- `src/components/main-nav.tsx` — Main navigation bar with profile link (used on all pages)
+- `src/components/viad-logo.tsx` — SVG wordmark logo for VIAD brand
+- `src/components/main-nav.tsx` — Main navigation bar with VIAD logo + "HUB IA" and profile link
 - `src/components/mobile-nav.tsx` — Responsive mobile navigation with profile link
 - `src/components/search.tsx` — Search input component for library/learning
 - `src/components/home-search.tsx` — Global search on home page (redirects to `/search`)
@@ -107,6 +118,7 @@ Actions call `revalidatePath()` on affected routes after mutations.
 - Server Actions that modify other users' data include defense-in-depth admin verification (not just RLS).
 - Pagination pattern: `searchParams.page`, `PAGE_SIZE` constant (12 for public, 20 for admin), `.range(from, to)`, count query with `{ count: 'exact', head: true }`.
 - Favorites pattern: cards receive optional `promptId`/`videoId` and `isFavorited` props. Pages fetch user favorites and pass them as a `Set<string>` for O(1) lookup.
+- Brand color tokens use `viad-*` prefix (e.g., `bg-viad-navy`, `text-viad-blue`, `hover:bg-viad-navy-light`).
 
 ## Migrations
 

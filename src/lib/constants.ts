@@ -1,4 +1,4 @@
-export const manifesto = `En el Consorcio Educativo Oriente, adoptamos la Inteligencia Artificial no como un reemplazo, sino como un catalizador del potencial humano. Creemos en una integración ética, responsable y estratégica de estas herramientas.`
+export const manifesto = `En la VIAD del Consorcio Educativo Oriente, adoptamos la Inteligencia Artificial no como un reemplazo, sino como un catalizador del potencial humano. Creemos en una integración ética, responsable y estratégica de estas herramientas.`
 
 
 // DEPRECATED: Categories are now managed in the database (prompt_categories table)

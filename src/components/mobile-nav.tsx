@@ -30,7 +30,7 @@ export function MobileNav({ isAdmin, isLoggedIn }: MobileNavProps) {
             </SheetTrigger>
             <SheetContent side="left" className="w-72">
                 <SheetHeader>
-                    <SheetTitle className="text-left">CEO AI Hub</SheetTitle>
+                    <SheetTitle className="text-left">VIAD HUB IA</SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col gap-1 mt-6">
                     <Link
@@ -71,7 +71,7 @@ export function MobileNav({ isAdmin, isLoggedIn }: MobileNavProps) {
                             <Link
                                 href="/admin"
                                 onClick={() => setOpen(false)}
-                                className="rounded-md px-3 py-2 text-sm font-medium text-uo-navy hover:bg-uo-blue/10 dark:text-uo-blue dark:hover:bg-uo-blue/10 transition-colors"
+                                className="rounded-md px-3 py-2 text-sm font-medium text-viad-navy hover:bg-viad-blue/10 dark:text-viad-blue dark:hover:bg-viad-blue/10 transition-colors"
                             >
                                 Panel Admin
                             </Link>
