@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { manifesto, tools } from '@/lib/constants'
 import { Sparkles, BookOpen, LayoutGrid, ExternalLink } from 'lucide-react'
 import { HomeSearch } from '@/components/home-search'
+import { ViadLogo } from '@/components/viad-logo'
 
 const toolIcons: Record<string, React.ReactNode> = {
   Sparkles: <Sparkles className="h-6 w-6 text-viad-blue" />,
@@ -20,9 +21,12 @@ export default function Home() {
         {/* Hero */}
         <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32 bg-gradient-to-b from-white to-gray-100 dark:from-gray-950 dark:to-gray-900 border-b">
           <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-viad-navy to-viad-blue">
-              VIAD HUB IA
-            </h1>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <ViadLogo className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto" color="#00205c" />
+              <span className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-viad-navy">
+                HUB IA
+              </span>
+            </div>
             <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
               Plataforma de Inteligencia Artificial de la VIAD — Consorcio Educativo Oriente.
             </p>
