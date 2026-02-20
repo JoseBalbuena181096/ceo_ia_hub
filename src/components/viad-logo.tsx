@@ -16,7 +16,7 @@ export function ViadLogo({ className, color = "currentColor", full = false }: Vi
   if (full) {
     return (
       <svg
-        viewBox="0 0 640 80"
+        viewBox="0 0 668 80"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className={className}
