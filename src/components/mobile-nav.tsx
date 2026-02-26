@@ -30,7 +30,7 @@ export function MobileNav({ isAdmin, isLoggedIn }: MobileNavProps) {
             </SheetTrigger>
             <SheetContent side="left" className="w-72">
                 <SheetHeader>
-                    <SheetTitle className="text-left">VIAD HUB IA</SheetTitle>
+                    <SheetTitle className="text-left">VIAD HUB</SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col gap-1 mt-6">
                     <Link

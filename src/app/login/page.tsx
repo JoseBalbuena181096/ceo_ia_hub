@@ -19,7 +19,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             <Card className="w-full max-w-md">
                 <CardHeader className="text-center pb-2">
                     <div className="mx-auto mb-4">
-                        <ViadLogo full className="h-8 w-auto" color="#00205c" />
+                        <ViadLogo full className="h-8 w-auto" />
                     </div>
                     <CardDescription>Acceso para personal del Consorcio</CardDescription>
                 </CardHeader>

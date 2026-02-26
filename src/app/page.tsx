@@ -21,7 +21,7 @@ export default function Home() {
         {/* Hero */}
         <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32 bg-gradient-to-b from-white to-gray-100 dark:from-gray-950 dark:to-gray-900 border-b">
           <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center mx-auto px-4 sm:px-6 lg:px-8">
-            <ViadLogo full className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto" color="#00205c" />
+            <ViadLogo full className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto" />
             <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
               Plataforma de Inteligencia Artificial de la VIAD — Consorcio Educativo Oriente.
             </p>
@@ -115,7 +115,7 @@ export default function Home() {
             Construido por la VIAD — Consorcio Educativo Oriente.
           </p>
           <p className="text-center text-xs text-muted-foreground/60 md:text-right">
-            VIAD HUB IA &copy; {new Date().getFullYear()}
+            VIAD HUB &copy; {new Date().getFullYear()}
           </p>
         </div>
       </footer>

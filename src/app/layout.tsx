@@ -29,8 +29,8 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "VIAD HUB IA",
-    template: "%s | VIAD HUB IA",
+    default: "VIAD HUB",
+    template: "%s | VIAD HUB",
   },
   description: "Plataforma de Inteligencia Artificial de la Vicerrectoría de Inteligencia Artificial y Desarrollo Tecnológico Aplicado (VIAD) del Consorcio Educativo Oriente.",
 };
