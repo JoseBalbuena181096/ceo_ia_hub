@@ -301,7 +301,10 @@ export function ChatWidget() {
 
         buffer += decoder.decode(value, { stream: true })
 
-        // Process complete SSE messages
+        // Process complete SSE messages (handle both \r\n and \n line endings)
+        const normalized = buffer.replace(/\r\n/g, '\n')
+        buffer = normalized
+
         while (buffer.includes('\n\n')) {
           const idx = buffer.indexOf('\n\n')
           const block = buffer.slice(0, idx)
@@ -310,11 +313,12 @@ export function ChatWidget() {
           let eventType = ''
           let eventData = ''
 
-          for (const line of block.split('\n')) {
-            if (line.startsWith('event: ')) {
-              eventType = line.slice(7).trim()
-            } else if (line.startsWith('data: ')) {
-              eventData = line.slice(6)
+          for (const rawLine of block.split('\n')) {
+            const line = rawLine.trim()
+            if (line.startsWith('event:')) {
+              eventType = line.slice(6).trim()
+            } else if (line.startsWith('data:')) {
+              eventData = line.slice(5).trim()
             }
           }
 
