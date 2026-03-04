@@ -23,7 +23,7 @@ export default function Home() {
           <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center mx-auto px-4 sm:px-6 lg:px-8">
             <ViadLogo full className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto" />
             <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-              Plataforma de Inteligencia Artificial de la VIAD — Consorcio Educativo Oriente.
+              Clínicas de Entrenamiento de IA — Consorcio Educativo de Oriente.
             </p>
             <div className="space-x-4">
               <Button asChild size="lg" className="bg-viad-navy hover:bg-viad-navy-light">

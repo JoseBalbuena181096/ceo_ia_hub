@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     default: "VIAD HUB",
     template: "%s | VIAD HUB",
   },
-  description: "Plataforma de Inteligencia Artificial de la Vicerrectoría de Inteligencia Artificial y Desarrollo Tecnológico Aplicado (VIAD) del Consorcio Educativo Oriente.",
+  description: "Clínicas de Entrenamiento de IA — Consorcio Educativo de Oriente.",
 };
 
 export default function RootLayout({
