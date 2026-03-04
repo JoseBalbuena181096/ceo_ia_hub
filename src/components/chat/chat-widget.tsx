@@ -49,12 +49,16 @@ export function ChatWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  // Auth check
+  // Auth check — listen for session changes (covers login redirect)
   useEffect(() => {
     const supabase = createClient()
     supabase.auth.getUser().then(({ data }) => {
       if (data.user) setUserId(data.user.id)
     })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user?.id ?? null)
+    })
+    return () => subscription.unsubscribe()
   }, [])
 
   // Load conversations when sidebar opens
