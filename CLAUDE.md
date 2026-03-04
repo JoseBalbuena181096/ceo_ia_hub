@@ -4,7 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-VIAD HUB IA — an internal knowledge management platform for the **Vicerrectoría de Inteligencia Artificial y Desarrollo Tecnológico Aplicado (VIAD)** of "Consorcio Educativo Oriente" (CEO). It serves as an AI manifesto portal, a prompt library, a micro-learning video catalog, a quick-access tool center (Gemini, NotebookLM, Workspace), and a user management panel. The UI and content are in **Spanish**.
+**VIAD HUB** — Clínicas de Entrenamiento de IA. Internal knowledge management platform for the **Consorcio Educativo de Oriente (CEO)**. Features a prompt library, micro-learning video catalog, VIAD Bot conversational chatbot, and admin panel. UI and content are in **Spanish**.
+
+**Production:** https://ceo-ia-hub-tu7s.vercel.app
+**Backend (VIAD Bot):** https://web-production-ccc6a.up.railway.app (repo: agente_viad_hub)
 
 ## Commands
 
@@ -12,7 +15,7 @@ VIAD HUB IA — an internal knowledge management platform for the **Vicerrector�
 - `npm run build` — Production build
 - `npm run lint` — ESLint (eslint-config-next with core-web-vitals + typescript)
 
-There are no test scripts configured.
+No test scripts configured.
 
 ## Tech Stack
 
@@ -26,12 +29,14 @@ There are no test scripts configured.
 
 ## Brand / Visual Identity
 
-- **Name:** VIAD HUB IA
+- **Name:** VIAD HUB
+- **Subtitle:** Clínicas de Entrenamiento de IA — Consorcio Educativo de Oriente
 - **Primary color:** `#00205c` (VIAD Navy) — CSS token `viad-navy`
 - **Secondary color:** `#94c9ed` (VIAD Light Blue) — CSS token `viad-blue`
 - **Accent colors:** `viad-orange` (#e25027), `viad-purple` (#87497a), `viad-salmon` (#f4c0b5), `viad-lavender` (#c0b0d7)
 - **Logo component:** `src/components/viad-logo.tsx` — SVG wordmark "VIAD"
 - **Favicon:** `src/app/icon.tsx` — dynamic "V" on navy background
+- **Institutional banner:** `public/consorcio-banner.png` — logos of UO, CSA, UO Global, CHDH, IADEU
 
 ## Architecture
 
@@ -45,94 +50,87 @@ The server client is intentionally typed as `any` to bypass insert type friction
 
 ### Database Tables (Supabase)
 
-- **profiles** — extends `auth.users` via trigger (`handle_new_user`). Key fields: `is_admin` (boolean), `is_blocked` (boolean, default false), `full_name`, `department`.
-- **prompts** — title, content, category (text, dynamic), tags (text[]), created_by.
-- **prompt_categories** — dynamic category names (replaces the old hardcoded `PROMPT_CATEGORIES` constant).
-- **videos** — title, url, category (text), duration.
-- **favorites** — user_id, item_type (`'prompt'` | `'video'`), item_id. Unique constraint on `(user_id, item_type, item_id)`.
+- **profiles** — extends `auth.users` via trigger (`handle_new_user`). Key fields: `is_admin`, `is_blocked`, `full_name`, `department`.
+- **prompts** — title, content, category (text), tags (text[]), created_by, `vectorized` (boolean).
+- **prompt_categories** — dynamic category names.
+- **videos** — title, url, category (text), duration, `vectorized` (boolean).
+- **favorites** — user_id, item_type (`'prompt'` | `'video'`), item_id.
+- **conversations** — id, user_id, title, created_at, updated_at (for VIAD Bot).
+- **messages** — id, conversation_id, role, content, created_at (for VIAD Bot).
+- **prompt_embeddings** — id, prompt_id, embedding VECTOR(3072), content, metadata.
+- **video_embeddings** — id, video_id, embedding VECTOR(3072), content, metadata.
 
-RLS policy pattern: SELECT for authenticated users; INSERT/UPDATE/DELETE restricted to admins (`profiles.is_admin = true`).
-
-**Important RLS note for profiles:** There are two UPDATE policies — users can update their own profile (`auth.uid() = id`), and admins can update any profile (used for blocking/unblocking users).
-
-**Favorites RLS:** Each user can only SELECT/INSERT/DELETE their own favorites (`auth.uid() = user_id`).
-
-Schema lives in `supabase/schema.sql`; incremental changes in `supabase/migrations/`.
+RLS policy pattern: SELECT for authenticated users; INSERT/UPDATE/DELETE restricted to admins.
 
 ### Auth & Authorization
 
 - Middleware (`src/middleware.ts`) enforces login on all routes except `/login`, `/auth`, and static assets.
 - Admin guard in `src/app/admin/layout.tsx` checks `profiles.is_admin` and redirects non-admins to `/`.
-- Two roles only: **Admin** (full CRUD via `/admin`) and **User** (read-only access to content, can manage own profile and favorites).
-- Admins can block/unblock users via `/admin/users`. Blocked users have `is_blocked = true` in profiles.
+- Two roles: **Admin** (full CRUD) and **User** (read-only content, manage own profile/favorites, use chatbot).
+
+### VIAD Bot (Chat Widget)
+
+- **Components:** `src/components/chat/chat-widget.tsx`, `chat-message.tsx`, `chat-provider.tsx`
+- **API URL:** env var `NEXT_PUBLIC_VIAD_BOT_API_URL`
+- **SSE Streaming:** Parses Server-Sent Events from the backend. Normalizes `\r\n` to `\n` for sse-starlette compatibility.
+- **Events:** `token`, `tool_call`, `tool_result`, `metadata`, `error`, `done`
+- **Auth:** userId passed from server layout → ChatProvider → ChatWidget as prop
+- **Features:** File attachments (images, PDFs), conversation history, expand/minimize, markdown rendering
+- **Dynamic import:** `ssr: false` to avoid hydration issues
 
 ### Route Structure
 
 | Route | Purpose |
 |---|---|
-| `/` | Home — manifesto, tool links, global search |
+| `/` | Home — VIAD HUB logo, institutional banner, CTA buttons |
 | `/login` | Email/password login and signup |
-| `/search` | Global search — queries prompts and videos in parallel, grouped results |
-| `/library` | Prompt catalog with search, category filtering, pagination, and favorites |
-| `/learning` | Video catalog with search, category filtering, pagination, and favorites |
-| `/profile` | User profile — edit name/department, view favorited prompts and videos |
-| `/admin` | Admin dashboard with stats (protected layout) |
-| `/admin/prompts` | Manage prompts with pagination (list, create at `/admin/prompts/new`, edit at `/admin/prompts/[id]/edit`) |
-| `/admin/videos` | Manage videos with pagination (list, create at `/admin/videos/new`, edit at `/admin/videos/[id]/edit`) |
-| `/admin/categories` | Manage dynamic prompt/video categories |
-| `/admin/users` | User management — view all users, block/unblock non-admin users |
+| `/search` | Global search — queries prompts and videos in parallel |
+| `/library` | Prompt catalog with search, category filtering, pagination, favorites |
+| `/learning` | Video catalog with search, category filtering, pagination, favorites |
+| `/profile` | User profile — edit name/department, view favorites |
+| `/admin` | Admin dashboard with stats |
+| `/admin/prompts` | Manage prompts (CRUD + vectorize button) |
+| `/admin/videos` | Manage videos (CRUD) |
+| `/admin/categories` | Manage dynamic categories |
+| `/admin/users` | User management — block/unblock |
 
 ### Server Actions
 
-Server Actions (files named `actions.ts` with `'use server'`) handle all mutations:
 - `src/app/admin/actions.ts` — CRUD for prompts and videos
 - `src/app/admin/categories/actions.ts` — CRUD for categories
-- `src/app/admin/users/actions.ts` — toggle block/unblock users (with admin verification)
+- `src/app/admin/users/actions.ts` — toggle block/unblock users
 - `src/app/login/actions.ts` — login/signup
-- `src/app/profile/actions.ts` — update own profile (`updateProfile`), toggle favorites (`toggleFavorite`)
-
-Actions call `revalidatePath()` on affected routes after mutations.
-
-### Reusable Components
-
-- `src/components/viad-logo.tsx` — SVG wordmark logo for VIAD brand
-- `src/components/main-nav.tsx` — Main navigation bar with VIAD logo + "HUB IA" and profile link
-- `src/components/mobile-nav.tsx` — Responsive mobile navigation with profile link
-- `src/components/search.tsx` — Search input component for library/learning
-- `src/components/home-search.tsx` — Global search on home page (redirects to `/search`)
-- `src/components/prompt-card.tsx` — Card display for prompts (with copy and favorite button)
-- `src/components/video-card.tsx` — Card display for videos (with modal playback and favorite button)
-- `src/components/pagination.tsx` — Pagination controls for lists (used in library, learning, admin prompts, admin videos)
-- `src/components/breadcrumb.tsx` — Breadcrumb navigation for admin pages
-- `src/components/confirm-delete.tsx` — Confirmation dialog for destructive actions
-- `src/components/submit-button.tsx` — Form submit button with loading state
-- `src/components/client-form.tsx` — Client-side form wrapper
+- `src/app/profile/actions.ts` — update profile, toggle favorites
 
 ### Key Conventions
 
-- Public pages (`/library`, `/learning`, `/search`, `/profile`) use `export const dynamic = 'force-dynamic'` to always fetch fresh data.
-- Static content (manifesto text, external tool links) is in `src/lib/constants.ts`.
-- shadcn/ui components are added via `npx shadcn@latest add <component>` and live in `src/components/ui/`.
-- Custom components (cards, nav, search) live directly in `src/components/`.
-- Null-safe access for optional DB fields: use `?? false` or `?? default` when reading fields that may be null (e.g., `is_blocked`).
-- Server Actions that modify other users' data include defense-in-depth admin verification (not just RLS).
-- Pagination pattern: `searchParams.page`, `PAGE_SIZE` constant (12 for public, 20 for admin), `.range(from, to)`, count query with `{ count: 'exact', head: true }`.
-- Favorites pattern: cards receive optional `promptId`/`videoId` and `isFavorited` props. Pages fetch user favorites and pass them as a `Set<string>` for O(1) lookup.
-- Brand color tokens use `viad-*` prefix (e.g., `bg-viad-navy`, `text-viad-blue`, `hover:bg-viad-navy-light`).
+- Public pages use `export const dynamic = 'force-dynamic'`.
+- Static content (manifesto, tool links) in `src/lib/constants.ts`.
+- shadcn/ui components: `npx shadcn@latest add <component>`.
+- Null-safe access: `?? false` or `?? default` for nullable DB fields.
+- Pagination: `searchParams.page`, `PAGE_SIZE` (12 public, 20 admin), `.range(from, to)`.
+- Brand colors use `viad-*` prefix (e.g., `bg-viad-navy`, `text-viad-blue`).
 
 ## Migrations
 
-Migrations are in `supabase/migrations/` and must be run manually in Supabase Dashboard > SQL Editor:
+Migrations in `supabase/migrations/`, run manually in Supabase SQL Editor:
 
-1. `01_update_category_text.sql` — Change prompt categories to text type
-2. `02_create_categories_table.sql` — Create dynamic categories table
-3. `03_update_video_category_text.sql` — Change video categories to text type
-4. `04_add_user_blocked_field.sql` — Add `is_blocked` column to profiles
-5. `05_fix_user_blocked_and_admin_policy.sql` — Fix: idempotent `is_blocked` column + admin UPDATE policy for profiles
-6. `06_create_favorites_table.sql` — Create `favorites` table with RLS (user-scoped SELECT/INSERT/DELETE)
+1. `01_update_category_text.sql` — Prompt categories to text type
+2. `02_create_categories_table.sql` — Dynamic categories table
+3. `03_update_video_category_text.sql` — Video categories to text type
+4. `04_add_user_blocked_field.sql` — `is_blocked` column on profiles
+5. `05_fix_user_blocked_and_admin_policy.sql` — Idempotent fix + admin UPDATE policy
+6. `06_create_favorites_table.sql` — Favorites with RLS
+7. `07_create_conversations_and_messages.sql` — Chat conversations and messages tables
+8. `08_create_prompt_embeddings.sql` — Vector embeddings for prompts
+9. `09_create_video_embeddings.sql` — Vector embeddings for videos
+10. `10_add_vectorized_flag.sql` — `vectorized` boolean on prompts/videos
+11. `11_rpc_similarity_search.sql` — RPC functions for similarity search
+12. `12_update_vector_dimensions_3072.sql` — Update vectors from 768 to 3072 dimensions
 
 ## Environment Variables
 
 Required in `.env.local`:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `NEXT_PUBLIC_VIAD_BOT_API_URL` — Backend URL for VIAD Bot (Railway)
