@@ -8,6 +8,6 @@ const ChatWidget = dynamic(
   { ssr: false }
 )
 
-export function ChatProvider() {
-  return <ChatWidget />
+export function ChatProvider({ userId }: { userId: string | null }) {
+  return <ChatWidget serverUserId={userId} />
 }

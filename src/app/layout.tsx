@@ -4,6 +4,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ChatProvider } from "@/components/chat/chat-provider";
+import { createClient } from "@/lib/supabase/server";
 
 const monda = localFont({
   src: "./fonts/Monda.ttf",
@@ -36,18 +37,21 @@ export const metadata: Metadata = {
   description: "Clínicas de Entrenamiento de IA — Consorcio Educativo de Oriente.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
   return (
     <html lang="es">
       <body
         className={`${monda.variable} ${nexa.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
-        <ChatProvider />
+        <ChatProvider userId={user?.id ?? null} />
         <Toaster />
       </body>
     </html>

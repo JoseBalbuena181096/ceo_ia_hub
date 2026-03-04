@@ -27,11 +27,11 @@ interface FilePreview {
 
 const API_URL = process.env.NEXT_PUBLIC_VIAD_BOT_API_URL || 'http://localhost:8000'
 
-export function ChatWidget() {
+export function ChatWidget({ serverUserId }: { serverUserId?: string | null }) {
   const [isOpen, setIsOpen] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
-  const [userId, setUserId] = useState<string | null>(null)
+  const [userId, setUserId] = useState<string | null>(serverUserId ?? null)
 
   // Conversations
   const [conversations, setConversations] = useState<Conversation[]>([])
