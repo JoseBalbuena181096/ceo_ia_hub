@@ -258,7 +258,18 @@ export function ChatWidget() {
     setIsLoading(true)
     setToolStatus(null)
 
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }])
+    // Build display content with file indicators (UI only, not sent to backend)
+    let displayContent = userMessage
+    if (files.length > 0) {
+      const fileLabels = files.map(f =>
+        f.type.startsWith('image/') ? `[Imagen: ${f.name}]` : `[Archivo: ${f.name}]`
+      )
+      displayContent = displayContent
+        ? `${displayContent}\n${fileLabels.join('\n')}`
+        : fileLabels.join('\n')
+    }
+
+    setMessages(prev => [...prev, { role: 'user', content: displayContent }])
 
     const fileAttachments = await Promise.all(
       files.map(async (f) => ({
