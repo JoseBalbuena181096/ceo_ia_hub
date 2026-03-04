@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Breadcrumb } from '@/components/breadcrumb'
+import { VectorizeButton } from '@/components/vectorize-button'
 
 export const dynamic = 'force-dynamic'
 
@@ -108,6 +109,11 @@ export default async function EditPromptPage({ params }: { params: Promise<{ id:
 
                         <SubmitButton className="w-full" loadingText="Guardando cambios...">Guardar Cambios</SubmitButton>
                     </ClientForm>
+
+                    <div className="mt-4 pt-4 border-t">
+                        <p className="text-sm text-muted-foreground mb-2">Indexar este prompt para que VIAD Bot pueda encontrarlo en el chat:</p>
+                        <VectorizeButton type="prompt" itemId={id} />
+                    </div>
                 </CardContent>
             </Card>
         </div>

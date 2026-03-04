@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { ChatProvider } from "@/components/chat/chat-provider";
 
 const monda = localFont({
   src: "./fonts/Monda.ttf",
@@ -46,6 +47,7 @@ export default function RootLayout({
         className={`${monda.variable} ${nexa.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
+        <ChatProvider />
         <Toaster />
       </body>
     </html>
