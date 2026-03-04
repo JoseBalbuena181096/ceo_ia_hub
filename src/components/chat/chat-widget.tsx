@@ -49,16 +49,40 @@ export function ChatWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  // Auth check — listen for session changes (covers login redirect)
+  // Auth check — poll session until available (covers login redirect timing)
   useEffect(() => {
     const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) setUserId(data.user.id)
-    })
+    let cancelled = false
+
+    const checkAuth = async () => {
+      // Try getSession first (reads local cookie, fast)
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user) {
+        setUserId(session.user.id)
+        return
+      }
+      // If no session yet, retry a few times (login redirect timing)
+      for (let i = 0; i < 5; i++) {
+        if (cancelled) return
+        await new Promise(r => setTimeout(r, 500))
+        const { data: { session: s } } = await supabase.auth.getSession()
+        if (s?.user) {
+          setUserId(s.user.id)
+          return
+        }
+      }
+    }
+
+    checkAuth()
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUserId(session?.user?.id ?? null)
     })
-    return () => subscription.unsubscribe()
+
+    return () => {
+      cancelled = true
+      subscription.unsubscribe()
+    }
   }, [])
 
   // Load conversations when sidebar opens
