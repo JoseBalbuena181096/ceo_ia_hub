@@ -20,21 +20,34 @@ export default function Home() {
       <MainNav />
       <main className="flex-1">
         {/* Hero */}
-        <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32 bg-gradient-to-b from-white to-gray-100 dark:from-gray-950 dark:to-gray-900 border-b">
-          <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center mx-auto px-4 sm:px-6 lg:px-8">
-            <ViadLogo full className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto" />
+        <section className="pb-12 pt-8 md:pb-16 md:pt-12 lg:pb-24 lg:pt-20 bg-gradient-to-b from-white to-gray-100 dark:from-gray-950 dark:to-gray-900 border-b">
+          <div className="container flex max-w-[64rem] flex-col items-center text-center mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Logo principal — protagonista */}
+            <ViadLogo full className="h-14 sm:h-18 md:h-22 lg:h-28 w-auto" />
+
+            {/* Subtítulo */}
+            <p className="mt-4 max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
+              Clínicas de Entrenamiento de IA
+            </p>
+
+            {/* Separador sutil */}
+            <div className="mt-6 mb-6 w-16 h-px bg-viad-blue/40" />
+
+            {/* Banner institucional — más pequeño y discreto */}
             <Image
               src="/consorcio-banner.png"
               alt="Instituciones del Consorcio Educativo de Oriente"
               width={800}
               height={46}
-              className="w-full max-w-[700px] h-auto opacity-90"
+              className="w-full max-w-[500px] h-auto opacity-60 hover:opacity-90 transition-opacity duration-300"
               priority
             />
-            <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-              Clínicas de Entrenamiento de IA — Consorcio Educativo de Oriente.
+            <p className="mt-2 text-xs tracking-widest uppercase text-muted-foreground/60">
+              Consorcio Educativo de Oriente
             </p>
-            <div className="space-x-4">
+
+            {/* CTAs con más espacio */}
+            <div className="mt-8 space-x-4">
               <Button asChild size="lg" className="bg-viad-navy hover:bg-viad-navy-light">
                 <Link href="/library">Explorar Prompts</Link>
               </Button>
