@@ -184,7 +184,7 @@ function MessageContent({ content }: { content: string }) {
   }
 
   return (
-    <div className="text-sm leading-relaxed space-y-1">
+    <div className="text-sm leading-relaxed space-y-1 [overflow-wrap:anywhere]">
       {renderContent(content)}
     </div>
   )
@@ -202,7 +202,7 @@ export const ChatMessage = memo(function ChatMessage({ role, content }: ChatMess
       }`}>
         {isUser ? <User className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}
       </div>
-      <div className={`max-w-[80%] rounded-xl px-3 py-2 ${
+      <div className={`max-w-[85%] rounded-xl px-3 py-2 break-words overflow-hidden ${
         isUser
           ? 'bg-viad-navy text-white'
           : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { MessageCircle, X, Plus, Trash2, Paperclip, Send, Loader2, ChevronLeft, Search } from 'lucide-react'
+import { MessageCircle, X, Plus, Trash2, Paperclip, Send, Loader2, ChevronLeft, Search, Maximize2, Minimize2 } from 'lucide-react'
 import { ChatMessage } from './chat-message'
 
 interface Message {
@@ -29,6 +29,7 @@ const API_URL = process.env.NEXT_PUBLIC_VIAD_BOT_API_URL || 'http://localhost:80
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
 
@@ -428,7 +429,11 @@ export function ChatWidget() {
 
       {/* Chat window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col w-[400px] h-[600px] max-h-[80vh] max-w-[calc(100vw-2rem)] rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-900">
+        <div className={`fixed z-50 flex flex-col rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-900 transition-all duration-300 ${
+            isExpanded
+              ? 'bottom-4 right-4 w-[700px] h-[85vh] max-w-[calc(100vw-2rem)]'
+              : 'bottom-6 right-6 w-[420px] h-[600px] max-h-[80vh] max-w-[calc(100vw-2rem)]'
+          }`}>
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-viad-navy rounded-t-xl">
             <div className="flex items-center gap-3">
@@ -447,12 +452,21 @@ export function ChatWidget() {
                 </div>
               </div>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-white/80 hover:text-white transition-colors"
-            >
-              <X className="h-5 w-5" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="text-white/80 hover:text-white transition-colors p-1"
+                title={isExpanded ? 'Reducir' : 'Ampliar'}
+              >
+                {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-white/80 hover:text-white transition-colors p-1"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
           </div>
 
           <div className="flex flex-1 overflow-hidden">
