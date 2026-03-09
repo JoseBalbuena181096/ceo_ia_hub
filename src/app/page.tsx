@@ -6,6 +6,7 @@ import { Sparkles, BookOpen, LayoutGrid, ExternalLink, ArrowRight, Search } from
 import { HomeSearch } from '@/components/home-search'
 import Image from 'next/image'
 import { ViadLogo } from '@/components/viad-logo'
+import { FloatingElements } from '@/components/floating-elements'
 
 const toolIcons: Record<string, React.ReactNode> = {
   Sparkles: <Sparkles className="h-5 w-5" />,
@@ -26,7 +27,7 @@ export default function Home() {
       <main className="flex-1">
         {/* Hero — Light background preserving logo brand colors */}
         <section className="relative overflow-hidden bg-gradient-to-b from-white via-white to-muted/50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 border-b border-border/30">
-          <div className="absolute inset-0 geo-grid" />
+          <FloatingElements />
           <div className="absolute inset-0 hero-glow" />
 
           <div className="relative z-10 container flex max-w-[64rem] flex-col items-center text-center mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-28 lg:pt-32 lg:pb-36">
