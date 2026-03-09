@@ -24,56 +24,56 @@ export default function Home() {
     <div className="flex min-h-screen flex-col">
       <MainNav />
       <main className="flex-1">
-        {/* Hero — Full navy with geometric grid */}
-        <section className="relative hero-gradient overflow-hidden">
-          <div className="absolute inset-0 geo-grid-dense hero-gradient-overlay" />
-          <div className="absolute inset-0 noise-texture" />
+        {/* Hero — Light background preserving logo brand colors */}
+        <section className="relative overflow-hidden bg-gradient-to-b from-white via-white to-muted/50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 border-b border-border/30">
+          <div className="absolute inset-0 geo-grid" />
+          <div className="absolute inset-0 hero-glow" />
 
           <div className="relative z-10 container flex max-w-[64rem] flex-col items-center text-center mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-28 lg:pt-32 lg:pb-36">
-            {/* Logo */}
+            {/* Logo — original colors preserved (IA in light blue) */}
             <div className="animate-viad-scale-in">
-              <ViadLogo full className="h-16 sm:h-20 md:h-24 lg:h-32 w-auto brightness-0 invert" />
+              <ViadLogo full className="h-16 sm:h-20 md:h-24 lg:h-32 w-auto" />
             </div>
 
             {/* Subtitle */}
-            <p className="mt-5 max-w-[42rem] text-viad-blue/80 text-base sm:text-lg md:text-xl leading-relaxed tracking-wide animate-viad-slide-up stagger-1">
+            <p className="mt-5 max-w-[42rem] text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed tracking-wide animate-viad-slide-up stagger-1">
               Clínicas de Entrenamiento de IA
             </p>
 
             {/* Thin accent line */}
             <div className="mt-6 mb-6 w-12 h-px bg-gradient-to-r from-transparent via-viad-blue/50 to-transparent animate-viad-fade-in stagger-2" />
 
-            {/* Institutional banner */}
+            {/* Institutional banner — original colors */}
             <div className="animate-viad-fade-in stagger-3">
               <Image
                 src="/consorcio-banner.png"
                 alt="Instituciones del Consorcio Educativo de Oriente"
                 width={800}
                 height={46}
-                className="w-full max-w-[420px] h-auto opacity-40 hover:opacity-70 transition-opacity duration-500 brightness-0 invert"
+                className="w-full max-w-[500px] h-auto opacity-60 hover:opacity-90 transition-opacity duration-500"
                 priority
               />
-              <p className="mt-2.5 text-[11px] tracking-[0.25em] uppercase text-viad-blue/40 font-medium">
+              <p className="mt-2.5 text-[11px] tracking-[0.25em] uppercase text-muted-foreground/50 font-medium">
                 Consorcio Educativo de Oriente
               </p>
             </div>
 
             {/* CTAs */}
             <div className="mt-10 flex flex-col sm:flex-row gap-3 animate-viad-slide-up stagger-4">
-              <Button asChild size="lg" className="bg-white text-viad-navy hover:bg-viad-blue/20 hover:text-white border-0 shadow-lg shadow-black/20 font-semibold tracking-wide transition-all duration-300">
+              <Button asChild size="lg" className="bg-viad-navy hover:bg-viad-navy-light text-white shadow-lg shadow-viad-navy/20 font-semibold tracking-wide transition-all duration-300">
                 <Link href="/library">
                   Explorar Prompts
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-viad-blue/30 text-viad-blue hover:bg-viad-blue/10 hover:border-viad-blue/50 font-medium tracking-wide transition-all duration-300">
+              <Button asChild variant="outline" size="lg" className="border-border hover:border-viad-blue/40 hover:bg-viad-blue/5 font-medium tracking-wide transition-all duration-300">
                 <Link href="/learning">Ver Hacks de IA</Link>
               </Button>
             </div>
           </div>
 
           {/* Bottom curve */}
-          <div className="absolute bottom-0 left-0 right-0 h-16 bg-background" style={{ clipPath: 'ellipse(55% 100% at 50% 100%)' }} />
+          <div className="absolute bottom-0 left-0 right-0 h-12 bg-background" style={{ clipPath: 'ellipse(55% 100% at 50% 100%)' }} />
         </section>
 
         {/* Manifesto */}

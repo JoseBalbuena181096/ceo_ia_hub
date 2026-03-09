@@ -278,6 +278,20 @@
     radial-gradient(circle at 50% 100%, rgba(148, 201, 237, 0.05) 0%, transparent 30%);
 }
 
+/* ─── Light hero glow (radial highlights) ─── */
+
+.hero-glow {
+  background-image:
+    radial-gradient(ellipse at 30% 40%, rgba(148, 201, 237, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(192, 176, 215, 0.06) 0%, transparent 40%);
+}
+
+.dark .hero-glow {
+  background-image:
+    radial-gradient(ellipse at 30% 40%, rgba(148, 201, 237, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(192, 176, 215, 0.03) 0%, transparent 40%);
+}
+
 /* ─── Subtle noise texture ─── */
 
 .noise-texture::after {
