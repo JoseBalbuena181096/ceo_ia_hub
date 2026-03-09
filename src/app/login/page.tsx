@@ -15,97 +15,112 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     const params = await searchParams
 
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
-            <Card className="w-full max-w-md">
-                <CardHeader className="text-center pb-2">
-                    <div className="mx-auto mb-4">
-                        <ViadLogo full className="h-8 w-auto" />
-                    </div>
-                    <CardDescription>Acceso para personal del Consorcio</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {params?.error && (
-                        <div className="mb-4 flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-400">
-                            <AlertCircle className="h-4 w-4 shrink-0" />
-                            {params.error}
-                        </div>
-                    )}
-                    {params?.message && (
-                        <div className="mb-4 flex items-center gap-2 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-400">
-                            <CheckCircle2 className="h-4 w-4 shrink-0" />
-                            {params.message}
-                        </div>
-                    )}
+        <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
+            {/* Background */}
+            <div className="absolute inset-0 hero-gradient" />
+            <div className="absolute inset-0 geo-grid-dense hero-gradient-overlay" />
+            <div className="absolute inset-0 noise-texture" />
 
-                    <Tabs defaultValue="login" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2 mb-4">
-                            <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
-                            <TabsTrigger value="register">Registrarse</TabsTrigger>
-                        </TabsList>
+            {/* Card */}
+            <div className="relative z-10 w-full max-w-md mx-4 animate-viad-scale-in">
+                <Card className="border-white/10 bg-white/95 dark:bg-card/95 backdrop-blur-xl shadow-2xl shadow-black/30">
+                    <CardHeader className="text-center pb-2 pt-8">
+                        <div className="mx-auto mb-5">
+                            <ViadLogo full className="h-9 w-auto" />
+                        </div>
+                        <CardDescription className="text-muted-foreground/80 text-sm">
+                            Acceso para personal del Consorcio
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="pb-8">
+                        {params?.error && (
+                            <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-400">
+                                <AlertCircle className="h-4 w-4 shrink-0" />
+                                {params.error}
+                            </div>
+                        )}
+                        {params?.message && (
+                            <div className="mb-4 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400">
+                                <CheckCircle2 className="h-4 w-4 shrink-0" />
+                                {params.message}
+                            </div>
+                        )}
 
-                        <TabsContent value="login">
-                            <form className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="email">Correo</Label>
-                                    <Input id="email" name="email" type="email" placeholder="usuario@ceo.edu.mx" required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="password">Contraseña</Label>
-                                    <Input id="password" name="password" type="password" required />
-                                </div>
-                                <SubmitButton
-                                    className="w-full bg-viad-navy hover:bg-viad-navy-light"
-                                    loadingText="Ingresando..."
-                                    formAction={login}
-                                >
-                                    Entrar
-                                </SubmitButton>
-                                <div className="text-center">
+                        <Tabs defaultValue="login" className="w-full">
+                            <TabsList className="grid w-full grid-cols-2 mb-5 bg-muted/60">
+                                <TabsTrigger value="login" className="text-xs font-medium tracking-wide uppercase">Iniciar Sesión</TabsTrigger>
+                                <TabsTrigger value="register" className="text-xs font-medium tracking-wide uppercase">Registrarse</TabsTrigger>
+                            </TabsList>
+
+                            <TabsContent value="login">
+                                <form className="space-y-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="email" className="text-xs font-medium tracking-wide uppercase text-muted-foreground">Correo</Label>
+                                        <Input id="email" name="email" type="email" placeholder="usuario@ceo.edu.mx" required className="h-11" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="password" className="text-xs font-medium tracking-wide uppercase text-muted-foreground">Contraseña</Label>
+                                        <Input id="password" name="password" type="password" required className="h-11" />
+                                    </div>
                                     <SubmitButton
-                                        variant="link"
-                                        className="text-sm text-muted-foreground hover:text-foreground p-0 h-auto"
-                                        loadingText="Enviando..."
-                                        formAction={resetPassword}
+                                        className="w-full bg-viad-navy hover:bg-viad-navy-light h-11 font-semibold tracking-wide shadow-lg shadow-viad-navy/20"
+                                        loadingText="Ingresando..."
+                                        formAction={login}
                                     >
-                                        ¿Olvidaste tu contraseña?
+                                        Entrar
                                     </SubmitButton>
-                                </div>
-                            </form>
-                        </TabsContent>
+                                    <div className="text-center">
+                                        <SubmitButton
+                                            variant="link"
+                                            className="text-xs text-muted-foreground hover:text-foreground p-0 h-auto"
+                                            loadingText="Enviando..."
+                                            formAction={resetPassword}
+                                        >
+                                            ¿Olvidaste tu contraseña?
+                                        </SubmitButton>
+                                    </div>
+                                </form>
+                            </TabsContent>
 
-                        <TabsContent value="register">
-                            <form className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="fullName">Nombre Completo</Label>
-                                    <Input id="fullName" name="fullName" placeholder="Ej. Juan Pérez" required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="department">Departamento</Label>
-                                    <Input id="department" name="department" placeholder="Ej. Secundaria, RRHH" required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="signup-email">Correo</Label>
-                                    <Input id="signup-email" name="email" type="email" placeholder="tu@correo.com" required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="signup-password">Contraseña</Label>
-                                    <Input id="signup-password" name="password" type="password" required />
-                                </div>
-                                <div className="text-xs text-muted-foreground">
-                                    * Tu cuenta será creada pero puede requerir validación.
-                                </div>
-                                <SubmitButton
-                                    className="w-full bg-green-600 hover:bg-green-700"
-                                    loadingText="Creando cuenta..."
-                                    formAction={signup}
-                                >
-                                    Crear Cuenta
-                                </SubmitButton>
-                            </form>
-                        </TabsContent>
-                    </Tabs>
-                </CardContent>
-            </Card>
+                            <TabsContent value="register">
+                                <form className="space-y-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="fullName" className="text-xs font-medium tracking-wide uppercase text-muted-foreground">Nombre Completo</Label>
+                                        <Input id="fullName" name="fullName" placeholder="Ej. Juan Pérez" required className="h-11" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="department" className="text-xs font-medium tracking-wide uppercase text-muted-foreground">Departamento</Label>
+                                        <Input id="department" name="department" placeholder="Ej. Secundaria, RRHH" required className="h-11" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="signup-email" className="text-xs font-medium tracking-wide uppercase text-muted-foreground">Correo</Label>
+                                        <Input id="signup-email" name="email" type="email" placeholder="tu@correo.com" required className="h-11" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="signup-password" className="text-xs font-medium tracking-wide uppercase text-muted-foreground">Contraseña</Label>
+                                        <Input id="signup-password" name="password" type="password" required className="h-11" />
+                                    </div>
+                                    <div className="text-[11px] text-muted-foreground/70 italic">
+                                        * Tu cuenta será creada pero puede requerir validación.
+                                    </div>
+                                    <SubmitButton
+                                        className="w-full bg-viad-navy hover:bg-viad-navy-light h-11 font-semibold tracking-wide shadow-lg shadow-viad-navy/20"
+                                        loadingText="Creando cuenta..."
+                                        formAction={signup}
+                                    >
+                                        Crear Cuenta
+                                    </SubmitButton>
+                                </form>
+                            </TabsContent>
+                        </Tabs>
+                    </CardContent>
+                </Card>
+
+                {/* Footer text */}
+                <p className="text-center mt-6 text-[11px] text-white/30 tracking-wider">
+                    VIAD HUB &mdash; Consorcio Educativo de Oriente
+                </p>
+            </div>
         </div>
     )
 }

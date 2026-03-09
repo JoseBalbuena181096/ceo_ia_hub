@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Play, Maximize2, Minimize2, Music, Heart } from "lucide-react"
+import { Play, Maximize2, Minimize2, Music, Heart, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import {
@@ -77,56 +77,69 @@ export function VideoCard({ title, url, category, duration, videoId, isFavorited
     return (
         <>
             <Card
-                className="overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                className="group overflow-hidden border-border/60 hover:border-viad-blue/30 hover:shadow-lg hover:shadow-viad-blue/5 transition-all duration-300 cursor-pointer"
                 onClick={() => setOpen(true)}
             >
-                <CardHeader className="p-4 pb-2">
-                    <div className="flex justify-between items-start">
-                        <Badge variant="secondary" className="mb-2">{category}</Badge>
-                        <div className="flex items-center gap-2">
-                            {duration && <span className="text-xs text-muted-foreground">{duration}</span>}
-                            {videoId && (
-                                <button
-                                    onClick={handleFavorite}
-                                    disabled={favLoading}
-                                    className="p-1 rounded-md hover:bg-muted transition-colors disabled:opacity-50"
-                                    aria-label={favorited ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-                                >
-                                    <Heart className={cn("h-4 w-4 transition-colors", favorited ? "fill-red-500 text-red-500" : "text-muted-foreground")} />
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                    <CardTitle className="text-lg line-clamp-2">{title}</CardTitle>
-                </CardHeader>
+                {/* Thumbnail first for visual impact */}
                 <CardContent className="p-0">
-                    <div className="aspect-video w-full bg-gray-900 relative overflow-hidden">
+                    <div className="aspect-video w-full bg-viad-navy relative overflow-hidden">
                         {info?.thumbnailUrl ? (
                             <img
                                 src={info.thumbnailUrl}
                                 alt={title}
-                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                             />
                         ) : (
-                            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col items-center justify-center gap-3 px-5 py-4">
+                            <div className="absolute inset-0 bg-gradient-to-br from-viad-navy via-viad-navy-light to-viad-purple/40 flex flex-col items-center justify-center gap-3 px-5 py-4">
                                 <div className="flex items-center gap-2">
-                                    <Music className="h-5 w-5 text-[#ff0050]" />
-                                    <span className="text-white font-semibold text-sm">
+                                    <Music className="h-5 w-5 text-viad-salmon" />
+                                    <span className="text-white/80 font-heading font-bold text-sm tracking-wide">
                                         {info?.platform || 'Video'}
                                     </span>
                                 </div>
-                                <p className="text-white text-base font-medium text-center line-clamp-3 leading-snug">
+                                <p className="text-white/70 text-sm font-medium text-center line-clamp-3 leading-snug">
                                     {title}
                                 </p>
                             </div>
                         )}
-                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <div className="bg-white/90 rounded-full p-3">
-                                <Play className="h-6 w-6 text-gray-900 fill-gray-900" />
+                        {/* Play overlay */}
+                        <div className="absolute inset-0 bg-viad-navy/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                            <div className="bg-white rounded-full p-3.5 shadow-xl shadow-black/20 scale-90 group-hover:scale-100 transition-transform duration-300">
+                                <Play className="h-5 w-5 text-viad-navy fill-viad-navy ml-0.5" />
                             </div>
                         </div>
+                        {/* Duration pill */}
+                        {duration && (
+                            <div className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm text-white text-[10px] font-mono px-2 py-0.5 rounded-md flex items-center gap-1">
+                                <Clock className="h-2.5 w-2.5" />
+                                {duration}
+                            </div>
+                        )}
                     </div>
                 </CardContent>
+                <CardHeader className="p-4 pt-3 pb-4">
+                    <div className="flex justify-between items-start gap-2">
+                        <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-medium border-viad-blue/20 text-viad-navy/60 dark:text-viad-blue/60 px-2 py-0.5 shrink-0">
+                            {category}
+                        </Badge>
+                        {videoId && (
+                            <button
+                                onClick={handleFavorite}
+                                disabled={favLoading}
+                                className="p-1 rounded-lg hover:bg-muted transition-all duration-200 disabled:opacity-50"
+                                aria-label={favorited ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+                            >
+                                <Heart className={cn(
+                                    "h-4 w-4 transition-all duration-300",
+                                    favorited
+                                        ? "fill-viad-orange text-viad-orange scale-110"
+                                        : "text-muted-foreground/50 group-hover:text-muted-foreground"
+                                )} />
+                            </button>
+                        )}
+                    </div>
+                    <CardTitle className="text-sm font-heading font-bold line-clamp-2 leading-snug mt-1">{title}</CardTitle>
+                </CardHeader>
             </Card>
 
             <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setExpanded(false) }}>
@@ -141,9 +154,9 @@ export function VideoCard({ title, url, category, duration, videoId, isFavorited
                                 : "max-w-3xl p-0 overflow-hidden flex flex-col"
                     }
                 >
-                    <DialogHeader className="p-4 pb-2 shrink-0">
+                    <DialogHeader className="p-4 pb-2 shrink-0 border-b border-border/40">
                         <div className="flex items-center gap-2 pr-16">
-                            <DialogTitle className="flex-1">{title}</DialogTitle>
+                            <DialogTitle className="flex-1 font-heading text-base">{title}</DialogTitle>
                             <Button
                                 variant="ghost"
                                 size="icon"
@@ -177,9 +190,9 @@ export function VideoCard({ title, url, category, duration, videoId, isFavorited
                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             />
                         ) : (
-                            <div className="flex items-center justify-center h-full bg-gray-900 text-white p-4 text-center flex-col gap-2">
-                                <p>Formato no soportado para preview.</p>
-                                <a href={url} target="_blank" rel="noopener noreferrer" className="text-viad-blue underline">
+                            <div className="flex items-center justify-center h-full bg-viad-navy text-white p-4 text-center flex-col gap-3">
+                                <p className="text-white/70">Formato no soportado para preview.</p>
+                                <a href={url} target="_blank" rel="noopener noreferrer" className="text-viad-blue hover:text-viad-blue/80 underline underline-offset-4 transition-colors">
                                     Abrir video original
                                 </a>
                             </div>

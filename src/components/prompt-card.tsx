@@ -46,28 +46,35 @@ export function PromptCard({ title, description, content, category, tags, prompt
     }
 
     return (
-        <Card className="flex flex-col h-full hover:shadow-md transition-shadow overflow-hidden">
+        <Card className="group flex flex-col h-full overflow-hidden border-border/60 hover:border-viad-blue/30 hover:shadow-lg hover:shadow-viad-blue/5 transition-all duration-300 accent-border-left">
             <CardHeader className="pb-3">
                 <div className="flex justify-between items-start gap-2">
-                    <CardTitle className="text-lg font-semibold leading-tight">{title}</CardTitle>
-                    <div className="flex items-center gap-1 shrink-0">
+                    <CardTitle className="text-base font-heading font-bold leading-tight tracking-tight">{title}</CardTitle>
+                    <div className="flex items-center gap-1.5 shrink-0">
                         {promptId && (
                             <button
                                 onClick={handleFavorite}
                                 disabled={favLoading}
-                                className="p-1 rounded-md hover:bg-muted transition-colors disabled:opacity-50"
+                                className="p-1.5 rounded-lg hover:bg-muted transition-all duration-200 disabled:opacity-50"
                                 aria-label={favorited ? 'Quitar de favoritos' : 'Agregar a favoritos'}
                             >
-                                <Heart className={cn("h-4 w-4 transition-colors", favorited ? "fill-red-500 text-red-500" : "text-muted-foreground")} />
+                                <Heart className={cn(
+                                    "h-4 w-4 transition-all duration-300",
+                                    favorited
+                                        ? "fill-viad-orange text-viad-orange scale-110"
+                                        : "text-muted-foreground/50 group-hover:text-muted-foreground"
+                                )} />
                             </button>
                         )}
-                        <Badge variant="outline">{category}</Badge>
+                        <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-medium border-viad-blue/20 text-viad-navy/60 dark:text-viad-blue/60 px-2 py-0.5">
+                            {category}
+                        </Badge>
                     </div>
                 </div>
                 {tags && tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
                         {tags.map(tag => (
-                            <span key={tag} className="text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                            <span key={tag} className="text-[10px] text-muted-foreground/70 bg-muted/60 px-2 py-0.5 rounded-full">
                                 #{tag}
                             </span>
                         ))}
@@ -76,27 +83,32 @@ export function PromptCard({ title, description, content, category, tags, prompt
             </CardHeader>
             <CardContent className="flex-1 space-y-3">
                 {description && (
-                    <p className="text-sm text-muted-foreground text-justify break-words overflow-hidden">{description}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed text-justify break-words overflow-hidden">{description}</p>
                 )}
-                <div className="bg-muted/50 p-3 rounded-md text-sm font-mono whitespace-pre-wrap max-h-[200px] overflow-y-auto relative group">
+                <div className="relative bg-viad-navy/[0.03] dark:bg-white/[0.04] border border-border/40 p-3.5 rounded-lg text-[13px] font-mono whitespace-pre-wrap max-h-[200px] overflow-y-auto leading-relaxed">
                     {content}
                 </div>
             </CardContent>
-            <CardFooter className="pt-0">
+            <CardFooter className="pt-0 pb-4">
                 <Button
                     variant="outline"
                     size="sm"
-                    className={cn("w-full transition-all", copied && "bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800")}
+                    className={cn(
+                        "w-full transition-all duration-300 font-medium text-xs tracking-wide",
+                        copied
+                            ? "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400"
+                            : "hover:bg-viad-navy hover:text-white hover:border-viad-navy dark:hover:bg-viad-blue dark:hover:text-viad-navy dark:hover:border-viad-blue"
+                    )}
                     onClick={handleCopy}
                 >
                     {copied ? (
                         <>
-                            <Check className="mr-2 h-4 w-4 text-green-600 dark:text-green-400" />
-                            <span className="text-green-600 dark:text-green-400">Copiado</span>
+                            <Check className="mr-2 h-3.5 w-3.5" />
+                            Copiado
                         </>
                     ) : (
                         <>
-                            <Copy className="mr-2 h-4 w-4" />
+                            <Copy className="mr-2 h-3.5 w-3.5" />
                             Copiar Prompt
                         </>
                     )}
