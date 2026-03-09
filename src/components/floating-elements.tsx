@@ -2,103 +2,58 @@
 
 import { useEffect, useRef, useCallback } from 'react'
 
+// VIAD brand colors — solid, not transparent party colors
+const COLORS = [
+  '#94c9ed',  // viad-blue
+  '#c0b0d7',  // viad-lavender
+  '#f4c0b5',  // viad-salmon
+  '#87497a',  // viad-purple
+  '#00205c',  // viad-navy
+  '#e8eef6',  // light blue-gray
+]
+
 interface Particle {
   x: number
   y: number
   vx: number
   vy: number
   size: number
-  opacity: number
   color: string
-  shape: 'circle' | 'ring' | 'square' | 'dot'
   rotation: number
   rotationSpeed: number
-  drift: number
-  phase: number
+  type: 0 | 1 | 2  // 0=circle, 1=square, 2=triangle
+  depth: number     // fake 3D depth (0.5–1.5)
 }
 
-const COLORS = [
-  'rgba(148, 201, 237, alpha)',  // viad-blue
-  'rgba(192, 176, 215, alpha)',  // viad-lavender
-  'rgba(244, 192, 181, alpha)',  // viad-salmon
-  'rgba(135, 73, 122, alpha)',   // viad-purple
-  'rgba(0, 32, 92, alpha)',      // viad-navy (subtle)
-]
-
-const SHAPES: Particle['shape'][] = ['circle', 'ring', 'square', 'dot', 'circle', 'ring', 'dot']
+const CONFIG = {
+  gravity: -0.05,        // negative = antigravity (float up)
+  friction: 0.98,
+  interactionRadius: 150,
+  pushStrength: 4,
+  speedFactor: 0.8,
+}
 
 export function FloatingElements() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
   const mouseRef = useRef({ x: -1000, y: -1000 })
   const animRef = useRef<number>(0)
-  const timeRef = useRef(0)
+  const dimsRef = useRef({ w: 0, h: 0 })
 
-  const initParticles = useCallback((width: number, height: number) => {
-    const count = Math.min(Math.floor((width * height) / 18000), 50)
-    const particles: Particle[] = []
-
-    for (let i = 0; i < count; i++) {
-      const colorTemplate = COLORS[Math.floor(Math.random() * COLORS.length)]
-      const baseOpacity = 0.12 + Math.random() * 0.25
-      const color = colorTemplate.replace('alpha', baseOpacity.toString())
-
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: -0.15 - Math.random() * 0.35, // float upward (antigravity)
-        size: 4 + Math.random() * 28,
-        opacity: baseOpacity,
-        color,
-        shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
-        rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.008,
-        drift: 0.3 + Math.random() * 0.7,
-        phase: Math.random() * Math.PI * 2,
-      })
+  const createParticle = useCallback((w: number, h: number, randomY: boolean): Particle => {
+    const depth = Math.random() * 1 + 0.5
+    return {
+      x: Math.random() * w,
+      y: randomY ? Math.random() * h : h + 50,
+      vx: (Math.random() - 0.5) * 2 * CONFIG.speedFactor,
+      vy: (Math.random() - 0.5) * 2 * CONFIG.speedFactor - Math.random() * Math.abs(CONFIG.gravity),
+      size: Math.random() * 15 + 5,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: (Math.random() - 0.5) * 0.05,
+      type: Math.floor(Math.random() * 3) as 0 | 1 | 2,
+      depth,
     }
-
-    particlesRef.current = particles
-  }, [])
-
-  const drawParticle = useCallback((ctx: CanvasRenderingContext2D, p: Particle) => {
-    ctx.save()
-    ctx.translate(p.x, p.y)
-    ctx.rotate(p.rotation)
-
-    switch (p.shape) {
-      case 'circle':
-        ctx.beginPath()
-        ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2)
-        ctx.fillStyle = p.color
-        ctx.fill()
-        break
-
-      case 'ring':
-        ctx.beginPath()
-        ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2)
-        ctx.strokeStyle = p.color
-        ctx.lineWidth = 1.5
-        ctx.stroke()
-        break
-
-      case 'square': {
-        const half = p.size / 2.5
-        ctx.fillStyle = p.color
-        ctx.fillRect(-half, -half, half * 2, half * 2)
-        break
-      }
-
-      case 'dot':
-        ctx.beginPath()
-        ctx.arc(0, 0, p.size / 5, 0, Math.PI * 2)
-        ctx.fillStyle = p.color
-        ctx.fill()
-        break
-    }
-
-    ctx.restore()
   }, [])
 
   useEffect(() => {
@@ -118,8 +73,16 @@ export function FloatingElements() {
       canvas.height = h * dpr
       canvas.style.width = `${w}px`
       canvas.style.height = `${h}px`
-      ctx.scale(dpr, dpr)
-      initParticles(w, h)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      dimsRef.current = { w, h }
+
+      // Initialize particles — ~35 shapes, proportional to area
+      const count = Math.min(Math.floor((w * h) / 25000), 40)
+      const particles: Particle[] = []
+      for (let i = 0; i < count; i++) {
+        particles.push(createParticle(w, h, true))
+      }
+      particlesRef.current = particles
     }
 
     resize()
@@ -127,63 +90,94 @@ export function FloatingElements() {
 
     const handleMouse = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect()
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      }
+      mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
     }
-
-    const handleMouseLeave = () => {
+    const handleTouch = (e: TouchEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      mouseRef.current = { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top }
+    }
+    const handleLeave = () => {
       mouseRef.current = { x: -1000, y: -1000 }
     }
 
     canvas.addEventListener('mousemove', handleMouse)
-    canvas.addEventListener('mouseleave', handleMouseLeave)
+    canvas.addEventListener('touchmove', handleTouch)
+    canvas.addEventListener('mouseleave', handleLeave)
 
     const animate = () => {
-      const parent = canvas.parentElement
-      if (!parent) return
-      const w = parent.clientWidth
-      const h = parent.clientHeight
-
+      const { w, h } = dimsRef.current
       ctx.clearRect(0, 0, w, h)
-      timeRef.current += 0.01
 
       const mouse = mouseRef.current
       const particles = particlesRef.current
 
-      for (const p of particles) {
-        // Sinusoidal drift (organic feel)
-        const driftX = Math.sin(timeRef.current * p.drift + p.phase) * 0.4
-        const driftY = Math.cos(timeRef.current * p.drift * 0.7 + p.phase) * 0.2
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i]
 
-        // Mouse interaction — gentle repulsion
+        // Antigravity — constant upward pull scaled by depth
+        p.vy += CONFIG.gravity * 0.05 * p.depth
+
+        // Movement scaled by depth (parallax)
+        p.x += p.vx * p.depth
+        p.y += p.vy * p.depth
+        p.rotation += p.rotationSpeed
+
+        // Mouse repulsion
         const dx = p.x - mouse.x
         const dy = p.y - mouse.y
         const dist = Math.sqrt(dx * dx + dy * dy)
-        let pushX = 0
-        let pushY = 0
 
-        if (dist < 150 && dist > 0) {
-          const force = (150 - dist) / 150
-          const ease = force * force * 0.8
-          pushX = (dx / dist) * ease
-          pushY = (dy / dist) * ease
+        if (dist < CONFIG.interactionRadius && dist > 0) {
+          const force = (CONFIG.interactionRadius - dist) / CONFIG.interactionRadius
+          const angle = Math.atan2(dy, dx)
+          p.vx += Math.cos(angle) * force * CONFIG.pushStrength
+          p.vy += Math.sin(angle) * force * CONFIG.pushStrength
         }
 
-        // Update position
-        p.x += p.vx + driftX + pushX
-        p.y += p.vy + driftY + pushY
-        p.rotation += p.rotationSpeed
+        // Friction (air resistance)
+        p.vx *= CONFIG.friction
+        p.vy *= CONFIG.friction
 
-        // Wrap around edges with padding
-        const pad = p.size + 10
-        if (p.y < -pad) p.y = h + pad
-        if (p.y > h + pad) p.y = -pad
-        if (p.x < -pad) p.x = w + pad
-        if (p.x > w + pad) p.x = -pad
+        // Horizontal wrap
+        if (p.x < -50) p.x = w + 50
+        if (p.x > w + 50) p.x = -50
 
-        drawParticle(ctx, p)
+        // When floated off top → respawn at bottom
+        if (p.y < -60) {
+          particles[i] = createParticle(w, h, false)
+          continue
+        }
+
+        // Draw
+        ctx.save()
+        ctx.translate(p.x, p.y)
+        ctx.rotate(p.rotation)
+        ctx.fillStyle = p.color
+
+        // Depth shadow for 3D feel
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.06)'
+        ctx.shadowBlur = 10 * p.depth
+        ctx.shadowOffsetX = 4
+        ctx.shadowOffsetY = 4
+
+        const s = p.size * p.depth
+
+        ctx.beginPath()
+        if (p.type === 0) {
+          // Circle
+          ctx.arc(0, 0, s / 2, 0, Math.PI * 2)
+        } else if (p.type === 1) {
+          // Square
+          ctx.rect(-s / 2, -s / 2, s, s)
+        } else {
+          // Triangle
+          ctx.moveTo(0, -s / 2)
+          ctx.lineTo(s / 2, s / 2)
+          ctx.lineTo(-s / 2, s / 2)
+          ctx.closePath()
+        }
+        ctx.fill()
+        ctx.restore()
       }
 
       animRef.current = requestAnimationFrame(animate)
@@ -195,9 +189,10 @@ export function FloatingElements() {
       cancelAnimationFrame(animRef.current)
       window.removeEventListener('resize', resize)
       canvas.removeEventListener('mousemove', handleMouse)
-      canvas.removeEventListener('mouseleave', handleMouseLeave)
+      canvas.removeEventListener('touchmove', handleTouch)
+      canvas.removeEventListener('mouseleave', handleLeave)
     }
-  }, [initParticles, drawParticle])
+  }, [createParticle])
 
   return (
     <canvas
