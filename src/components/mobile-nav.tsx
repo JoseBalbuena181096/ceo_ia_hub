@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Menu, BookOpen, Play, User, Shield, LogOut, Home } from 'lucide-react'
+import { Menu, BookOpen, Play, User, Shield, LogOut, Home, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
     Sheet,
@@ -59,14 +59,24 @@ export function MobileNav({ isAdmin, isLoggedIn }: MobileNavProps) {
                     </Link>
 
                     {isLoggedIn && (
-                        <Link
-                            href="/profile"
-                            onClick={() => setOpen(false)}
-                            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-viad-blue/8 transition-colors"
-                        >
-                            <User className="h-4 w-4 text-muted-foreground" />
-                            Mi perfil
-                        </Link>
+                        <>
+                            <Link
+                                href="/profile"
+                                onClick={() => setOpen(false)}
+                                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-viad-blue/8 transition-colors"
+                            >
+                                <User className="h-4 w-4 text-muted-foreground" />
+                                Mi perfil
+                            </Link>
+                            <Link
+                                href="/favorites"
+                                onClick={() => setOpen(false)}
+                                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-viad-blue/8 transition-colors"
+                            >
+                                <Heart className="h-4 w-4 text-viad-orange" />
+                                Mis favoritos
+                            </Link>
+                        </>
                     )}
 
                     {isAdmin && (
