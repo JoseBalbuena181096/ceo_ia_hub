@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { ShieldCheck } from 'lucide-react'
@@ -15,6 +16,14 @@ export default async function AdminUsersPage() {
         .from('profiles')
         .select('*')
         .order('full_name', { ascending: true })
+
+    // Fetch auth users to get emails
+    const adminClient = createAdminClient()
+    const { data: authData } = await adminClient.auth.admin.listUsers()
+    const emailMap = new Map<string, string>()
+    authData?.users?.forEach(u => {
+        if (u.email) emailMap.set(u.id, u.email)
+    })
 
     const totalUsers = users?.length ?? 0
     const blockedCount = users?.filter(u => u.is_blocked ?? false).length ?? 0
@@ -48,6 +57,7 @@ export default async function AdminUsersPage() {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Nombre</TableHead>
+                            <TableHead>Correo</TableHead>
                             <TableHead>Departamento</TableHead>
                             <TableHead>Rol</TableHead>
                             <TableHead>Estado</TableHead>
@@ -60,6 +70,9 @@ export default async function AdminUsersPage() {
                                 <TableRow key={user.id}>
                                     <TableCell className="font-medium">
                                         {user.full_name || 'Sin nombre'}
+                                    </TableCell>
+                                    <TableCell className="text-sm text-muted-foreground">
+                                        {emailMap.get(user.id) || '-'}
                                     </TableCell>
                                     <TableCell>{user.department || '-'}</TableCell>
                                     <TableCell>
@@ -104,7 +117,7 @@ export default async function AdminUsersPage() {
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                                <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
                                     No hay usuarios registrados.
                                 </TableCell>
                             </TableRow>
