@@ -11,9 +11,10 @@ interface SubmitButtonProps {
     loadingText?: string
     variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
     formAction?: (formData: FormData) => void
+    formNoValidate?: boolean
 }
 
-export function SubmitButton({ children, className, loadingText = 'Procesando...', variant = 'default', formAction }: SubmitButtonProps) {
+export function SubmitButton({ children, className, loadingText = 'Procesando...', variant = 'default', formAction, formNoValidate }: SubmitButtonProps) {
     const { pending } = useFormStatus()
 
     return (
@@ -23,6 +24,7 @@ export function SubmitButton({ children, className, loadingText = 'Procesando...
             variant={variant}
             className={cn(className)}
             formAction={formAction}
+            formNoValidate={formNoValidate}
         >
             {pending ? (
                 <>
