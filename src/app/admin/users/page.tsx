@@ -86,32 +86,30 @@ export default async function AdminUsersPage() {
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        {user.is_admin ? (
-                                            <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                                                <ShieldCheck className="h-3.5 w-3.5" />
-                                                Protegido
-                                            </span>
-                                        ) : (
-                                            <div className="inline-flex items-center gap-1">
-                                                <EditUserDialog
-                                                    action={updateUser.bind(null, user.id)}
-                                                    user={{
-                                                        id: user.id,
-                                                        full_name: user.full_name,
-                                                        department: user.department,
-                                                    }}
-                                                />
-                                                <ToggleBlockButton
-                                                    action={toggleBlockUser.bind(null, user.id)}
-                                                    isBlocked={user.is_blocked ?? false}
-                                                    userName={user.full_name || 'este usuario'}
-                                                />
-                                                <DeleteUserButton
-                                                    action={deleteUser.bind(null, user.id)}
-                                                    userName={user.full_name || 'este usuario'}
-                                                />
-                                            </div>
-                                        )}
+                                        <div className="inline-flex items-center gap-1">
+                                            <EditUserDialog
+                                                action={updateUser.bind(null, user.id)}
+                                                user={{
+                                                    id: user.id,
+                                                    full_name: user.full_name,
+                                                    department: user.department,
+                                                    is_admin: user.is_admin,
+                                                }}
+                                            />
+                                            {!user.is_admin && (
+                                                <>
+                                                    <ToggleBlockButton
+                                                        action={toggleBlockUser.bind(null, user.id)}
+                                                        isBlocked={user.is_blocked ?? false}
+                                                        userName={user.full_name || 'este usuario'}
+                                                    />
+                                                    <DeleteUserButton
+                                                        action={deleteUser.bind(null, user.id)}
+                                                        userName={user.full_name || 'este usuario'}
+                                                    />
+                                                </>
+                                            )}
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))

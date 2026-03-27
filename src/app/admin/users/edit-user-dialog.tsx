@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { Pencil, Loader2 } from 'lucide-react'
+import { Pencil, Loader2, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
     Dialog,
     DialogContent,
@@ -22,12 +23,14 @@ interface EditUserDialogProps {
         id: string
         full_name: string | null
         department: string | null
+        is_admin: boolean
     }
 }
 
 export function EditUserDialog({ action, user }: EditUserDialogProps) {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(user.is_admin)
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -80,6 +83,23 @@ export function EditUserDialog({ action, user }: EditUserDialogProps) {
                             defaultValue={user.department ?? ''}
                             placeholder="Departamento"
                         />
+                    </div>
+                    <div className="flex items-center gap-3 rounded-lg border p-3">
+                        <Checkbox
+                            id="is_admin"
+                            checked={isAdmin}
+                            onCheckedChange={(checked) => setIsAdmin(checked === true)}
+                        />
+                        <input type="hidden" name="is_admin" value={isAdmin ? 'true' : 'false'} />
+                        <div className="space-y-0.5">
+                            <Label htmlFor="is_admin" className="flex items-center gap-1.5 cursor-pointer">
+                                <ShieldCheck className="h-4 w-4 text-viad-navy" />
+                                Administrador
+                            </Label>
+                            <p className="text-xs text-muted-foreground">
+                                Permite acceso completo al panel de administración.
+                            </p>
+                        </div>
                     </div>
                     <DialogFooter>
                         <Button

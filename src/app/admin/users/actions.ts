@@ -73,10 +73,12 @@ export async function updateUser(userId: string, formData: FormData) {
 
     const fullName = formData.get('full_name') as string
     const department = formData.get('department') as string
+    const isAdmin = formData.get('is_admin') === 'true'
 
     const { error } = await (supabase as any).from('profiles').update({
         full_name: fullName || null,
         department: department || null,
+        is_admin: isAdmin,
     }).eq('id', userId)
 
     if (error) {
