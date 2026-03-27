@@ -2,8 +2,10 @@ import { createClient } from '@/lib/supabase/server'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { ShieldCheck } from 'lucide-react'
-import { toggleBlockUser } from './actions'
+import { toggleBlockUser, updateUser, deleteUser } from './actions'
 import { ToggleBlockButton } from './toggle-block-button'
+import { DeleteUserButton } from './delete-user-button'
+import { EditUserDialog } from './edit-user-dialog'
 
 export const dynamic = 'force-dynamic'
 
@@ -77,11 +79,25 @@ export default async function AdminUsersPage() {
                                                 Protegido
                                             </span>
                                         ) : (
-                                            <ToggleBlockButton
-                                                action={toggleBlockUser.bind(null, user.id)}
-                                                isBlocked={user.is_blocked ?? false}
-                                                userName={user.full_name || 'este usuario'}
-                                            />
+                                            <div className="inline-flex items-center gap-1">
+                                                <EditUserDialog
+                                                    action={updateUser.bind(null, user.id)}
+                                                    user={{
+                                                        id: user.id,
+                                                        full_name: user.full_name,
+                                                        department: user.department,
+                                                    }}
+                                                />
+                                                <ToggleBlockButton
+                                                    action={toggleBlockUser.bind(null, user.id)}
+                                                    isBlocked={user.is_blocked ?? false}
+                                                    userName={user.full_name || 'este usuario'}
+                                                />
+                                                <DeleteUserButton
+                                                    action={deleteUser.bind(null, user.id)}
+                                                    userName={user.full_name || 'este usuario'}
+                                                />
+                                            </div>
                                         )}
                                     </TableCell>
                                 </TableRow>
