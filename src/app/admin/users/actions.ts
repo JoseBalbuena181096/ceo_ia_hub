@@ -123,23 +123,49 @@ export async function deleteUser(userId: string, _formData: FormData) {
         return { success: false, message: 'No se puede eliminar a un administrador' }
     }
 
-    // Delete the auth user via admin API — this cascades:
-    // auth.users → profiles (trigger/FK) → favorites, conversations → messages
     const adminClient = createAdminClient()
-    const { error: authError } = await adminClient.auth.admin.deleteUser(userId)
 
-    if (authError) {
-        console.error('Error deleting auth user:', authError)
-        // Fallback: try deleting profile directly (cascades favorites, conversations, messages)
-        const { error: profileError } = await (supabase as any)
-            .from('profiles')
+    // 1. Delete favorites
+    const { error: favError } = await adminClient
+        .from('favorites')
+        .delete()
+        .eq('user_id', userId)
+    if (favError) console.error('Error deleting favorites:', favError)
+
+    // 2. Delete messages via conversations
+    const { data: convos } = await adminClient
+        .from('conversations')
+        .select('id')
+        .eq('user_id', userId)
+    if (convos && convos.length > 0) {
+        const convoIds = convos.map((c: { id: string }) => c.id)
+        const { error: msgError } = await adminClient
+            .from('messages')
             .delete()
-            .eq('id', userId)
-        if (profileError) {
-            console.error('Error deleting profile:', profileError)
-            return { success: false, message: 'Error al eliminar el usuario' }
-        }
+            .in('conversation_id', convoIds)
+        if (msgError) console.error('Error deleting messages:', msgError)
     }
+
+    // 3. Delete conversations
+    const { error: convoError } = await adminClient
+        .from('conversations')
+        .delete()
+        .eq('user_id', userId)
+    if (convoError) console.error('Error deleting conversations:', convoError)
+
+    // 4. Delete profile
+    const { error: profileError } = await adminClient
+        .from('profiles')
+        .delete()
+        .eq('id', userId)
+    if (profileError) {
+        console.error('Error deleting profile:', profileError)
+        return { success: false, message: 'Error al eliminar el perfil del usuario' }
+    }
+
+    // 5. Delete auth user
+    const { error: authError } = await adminClient.auth.admin.deleteUser(userId)
+    if (authError) console.error('Error deleting auth user:', authError)
 
     revalidatePath('/admin/users')
     return { success: true, message: 'Usuario eliminado permanentemente' }
