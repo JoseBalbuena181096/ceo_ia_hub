@@ -75,6 +75,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                                             className="text-xs text-muted-foreground hover:text-foreground p-0 h-auto"
                                             loadingText="Enviando..."
                                             formAction={resetPassword}
+                                            formNoValidate
                                         >
                                             ¿Olvidaste tu contraseña?
                                         </SubmitButton>
